@@ -1,0 +1,132 @@
+<div id="head-nav" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="fa fa-gear"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <span>后台管理系统</span>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="{{url_for('manage.index')}}">快速入口</a>
+                </li>
+                {% if current_user.group.power <= 2  %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        产品管理 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if current_user.group.power <= 1  %}
+                        <li>
+                            <a href="{{url_for('manage.manage_classify')}}">产品分类管理</a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.group.power <= 1  %}
+                        <li>
+                            <a href="{{url_for('manage.manage_recommend')}}">产品推荐类型</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{url_for('manage.manage_product', pid = 0)}}">产品管理</a>
+                        </li>
+                        {% if current_user.group.power <= 1  %}
+                        <li>
+                            <a href="{{url_for('manage.manage_size')}}">尺码管理</a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.group.power <= 1  %}
+                        <li>
+                            <a href="{{url_for('manage.manage_wash')}}">洗涤说明管理</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if current_user.group.power <= 2  %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        订单管理 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{url_for('manage.manage_order', order_type = 0, state = 0, page = 1)}}">订单管理</a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('manage.manage_order', order_type = 1, state = 0, page = 1)}}">借调订单管理</a>
+                        </li>
+                        {% if current_user.group.power <= 1  %}
+                        <li>
+                            <a href="#">订单统计分析</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if current_user.group.power <= 2  %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        用户管理 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if current_user.group.power <= 0  %}
+                        <li>
+                            <a href="{{url_for('manage.manage_customers')}}">客户注册审核</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{url_for('manage.manage_customers', verify = 0, status = 0)}}">客户管理</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% if current_user.group.power <= 3  %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        资讯管理 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{url_for('manage.manage_news', pid = 1)}}">资讯管理</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right user-nav">
+                <li class="dropdown profile_menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img alt="Avatar" src="{{url_for('static',filename='admin/images/avatar2.jpg')}}" />
+                        <span style="display: inline-block;line-height: 14px;vertical-align: middle">{{ current_user.group.name }}<br>{{ current_user.username }}</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{url_for('manage.my_info', getid = current_user.id)}}">我的信息</a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('manage.my_password', getid = current_user.id)}}">修改密码</a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('manage.manage_guestbook', status = 0, page = 1)}}">客户留言</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{url_for('manage.logout')}}">退出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right not-nav">
+                <li class="button dropdown">
+                    <a href="{{url_for('manage.manage_guestbook', status = 0, page = 1)}}">
+                        <i class="fa fa-comments"></i>
+                        <span class="bubble" id="mymessages" data-thisid="{{current_user.id}}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse animate-collapse --> </div>
+</div>

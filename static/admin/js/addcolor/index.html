@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../minicolors/jquery.minicolors.css">
+    <link rel="stylesheet" type="text/css" href="../webuploader/webuploader.css">
+    <style type="text/css">
+        .upimgshow {
+            margin-top:20px;
+        }
+        .upimgshow > li {
+            padding:5px;
+            margin-right: 15px;
+            width: 110px;
+            height: 110px;
+            overflow: hidden;
+            position: relative;
+            overflow: hidden;
+            cursor: move;
+            display: inline-block;
+            list-style: none;
+        }
+        .upimgshow > li img {
+            width: 110px;
+            min-height: 110px;
+
+        }
+        .upimgshow > li > em {
+            position: absolute;
+            height: 30px;
+            line-height: 30px;
+            font-size: 12px;
+            color:#fff;
+            background:rgba(0,0,0,.8);
+            width: 100%;
+            top:-30px;
+            z-index: 90;
+            transition: all .3s ease;
+            text-align: center;
+            font-style: inherit;
+            cursor: pointer;
+            display: none;
+        }
+        .upimgshow > li:hover > em {
+            top:0;
+            display: block
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="form-group col-sm-12" style="margin-top: 20px">
+            <label class="col-sm-12 control-label danger">请上传至少5张图片</label>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-2 control-label">上传封面图</label>
+            <div class="col-sm-6">
+                <div id="picker">请选择</div>
+                <div class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-info" role="progressbar" style="width:0%;"></div>
+                </div>
+                <input id="cover" type="hidden">
+                <div name="showimg"><img src="" width="30%"></div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12" style="margin-top: 20px">
+            <label class="col-sm-2 control-label">颜色名称</label>
+            <div class="col-sm-6">
+                <input type="hidden" name="colorid" id="colorid" value="">
+                <input class="form-control" id="colortitle" name="colortitle" placeholder="颜色名称" type="text" value=""></div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-2 control-label">选择颜色</label>
+            <div class="col-sm-6">
+                <input type="text" id="hue-demo" name="color" class="form-control" data-control="hue"></div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-2 control-label">产品编号</label>
+            <div class="col-sm-6">
+                <input class="form-control" id="number" name="number" placeholder="产品编号" type="text" ></div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-2 control-label">上传图片</label>
+            '
+            <div class="col-sm-6">
+                <button type="button" name="upimages" class="btn btn-success btn-rad"> <i class="fa fa-cloud-upload"></i>
+                    上传图片
+                </button>
+                <input type="hidden" name="picid" id="picid" />
+            </div>
+<!--             <div class="col-sm-12 showeditpic" style="padding-top:15px; display: none">
+                <button type="button" name="editpics" class="btn btn-success btn-rad"> <i class="fa fa-sort"></i>
+                    编辑图片排序
+                </button>
+                <button type="button" name="savesort" class="btn btn-danger btn-rad" style="margin-left:10px;">
+                    <i class="fa fa-save"></i>
+                    保存图片排序
+                </button>
+            </div> -->
+            <div class="col-sm-12 upimgshow" style="padding-top:15px;">
+            </div>
+        </div>
+        <div class="form-group col-sm-12" style="margin-top: 20px;">
+            <div class="col-sm-12">
+                <button type="button" name="addDom" class="btn btn-success btn-rad" disabled="disabled" data-imgpath="">添加这组颜色</button>
+                <button type="button" name="removeDom" class="btn btn-danger btn-rad" style="margin-left: 15px;">取消添加</button>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" charset="utf-8" src="../jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../minicolors/jquery.minicolors.min.js"></script>
+    <script src="../jquery.dragsort-0.5.2.min.js"></script>
+    <script src="../layer/layer.js"></script>
+    <script src="../webuploader/webuploader.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // 获取父元素
+            var index = parent.layer.getFrameIndex(window.name);
+            // var _parentHtml = parent.$('html,body');
+            // 选择颜色
+            $('#hue-demo').minicolors({
+                control: $(this).attr('data-control') || 'hue',
+                defaultValue: $(this).attr('data-defaultValue') || '',
+                inline: $(this).attr('data-inline') === 'true',
+                letterCase: $(this).attr('data-letterCase') || 'lowercase',
+                opacity: $(this).attr('data-opacity'),
+                position: $(this).attr('data-position') || 'bottom left',
+                change: function(hex, opacity) {
+                    var log;
+                    try {
+                        log = hex ? hex : 'transparent';
+                        if( opacity ) log += ', ' + opacity;
+                        // console.log(log);
+                    } catch(e) {}
+                },
+                theme: 'default'
+            });
+
+            var picids = [];
+            var piclen = '';
+            // 图片上传
+            $('[name="upimages"]').click(function(event) {
+                layer.open({
+                    type: 2,
+                    title: '上传图片',
+                    shadeClose: false,
+                    shade: 0.8,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '440px'],
+                    content: "../webuploader/coloruploader.html",
+                    success: function(layero, index){
+                        var body = layer.getChildFrame('body',index);//建立父子联系
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        // body.find('#fatherid').val();
+                    },
+                    end: function(){
+                        picids = pic_sorts(picids);
+                        piclen = $('.upimgshow').children('li').length;
+                        if(piclen >= 5){
+                            $('[name="addDom"]').removeAttr("disabled")
+                        };
+                    }
+                });
+            });
+
+            // 单个删除图片
+            $('.upimgshow').delegate('em','click',function(){
+                var id = $(this).parent('li').data('sort');
+                delpics(id);
+                $(this).parent('li').remove();
+                picids = pic_sorts(picids);
+                piclen = $(this).parents('.upimgshow').children('li').length;
+                if(piclen >= 5){
+                    $('[name="addDom"]').removeAttr("disabled")
+                }else{
+                    $('[name="addDom"]').attr("disabled","true")
+                };
+            });
+
+
+            // 图片排序
+            $(".upimgshow").dragsort({
+                dragSelector: "li", 
+                dragEnd: function() {
+                    picids = pic_sorts(picids);
+                    piclen = $('.upimgshow').children('li').length;
+                    if(piclen >= 5){
+                        $('[name="addDom"]').removeAttr("disabled")
+                    };
+                    // console.log(picids);
+                }, 
+                dragBetween: true, 
+                placeHolderTemplate: "<li></li>" 
+            });
+
+            // 排序函数
+            function pic_sorts(picids){
+                picids = [];
+                $('.upimgshow').children('li').each(function(index, el) {
+                    var this_sort = $(this).data('sort');
+                    picids.push(this_sort);
+                });
+                return picids;
+            }
+
+            // 删除图片函数
+            function delpics(id){
+                $.ajax({
+                     url: '/manage/del_pic?picid='+id,
+                     dataType: 'json',
+                     method: 'GET',
+                     success: function(data) {
+                     },
+                     error: function(xhr) {
+                         // 导致出错的原因较多，以后再研究
+                         // console.log(xhr)
+                     }
+                });
+            };
+
+            // 取消添加颜色组
+            $('[name="removeDom"]').click(function(event) {
+                if(picids.length > 0){
+                    for (var i = 0; i < picids.length; i++) {
+                        delpics(picids[i]);
+                    };
+                    parent.layer.close(index);
+                }else {
+                    parent.layer.close(index);
+                }
+            });
+
+            // 验证必填
+            
+
+            $('[name="addDom"]').click(function(event) {
+                var  coname = $('#colortitle').val();
+                var thcolor = $('#hue-demo').val();
+                var  number = $('#number').val();
+                var cover = $('#cover').val();
+                if(coname.length >= 1 && thcolor.length > 0 && number.length > 5){
+                    var img = $(this).data('imgpath');
+                    var color_html = '<div name="colors" style="height:100px;padding:10px 0;border-bottom:1px solid #ddd">'
+                            +'<div class="col-sm-3 text-right"><img src="'+img+'"></div>'
+                            +'<div class="col-sm-6">'
+                            +'    <h5>'+coname+'</h5>'
+                            +'    <h5><div style="width:80px;height:8px;background:'+thcolor+'"></div></h5>'
+                            +'    <h5>产品编号：'+number+'</h5>'
+                            +'</div>'
+                            +'<div class="col-sm-3">'
+                            +'    <button type="button" name="editcolor" class="btn btn-info btn-rad">编辑这组颜色</button>'
+                            +'    <button type="button" name="delcolor" class="btn btn-danger btn-rad">删除这组颜色</button>'
+                            +'</div>'
+                            +'<input type="hidden" name="colorid" id="colorid" value="" />'
+                            +'<input id="colortitle" name="colortitle" type="hidden" value="'+coname+'">'
+                            +'<input type="hidden" id="color" name="color" value="'+thcolor+'" />'
+                            +'<input type="hidden" id="number" name="number" value="'+number+'" />'
+                            +'<input type="hidden" name="picid" id="picid" value="'+picids+'" />'
+                            +'<input type="hidden" name="cover" id="cover" value="'+cover+'" />'
+                            +'</div>';
+                    parent.$('.newcolor').append(color_html).show();
+                    parent.layer.close(index);
+                }else{
+                    layer.alert('以上信息都是必填信息');
+                }
+            });
+
+        });
+
+        // 图片上传控件
+        $('.progress').hide();
+
+        var task_id = WebUploader.Base.guid();
+        var uploader = WebUploader.create({
+            swf: './static/webuploader/Uploader.swf',
+            server: '/manage/coverupload',
+            pick: '#picker',
+            multiple: false,
+            accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif'
+                },
+            auto: true,
+            threads: 3,
+            duplicate: true,
+            formData: {
+                task_id: task_id,
+            },
+        });
+        uploader.on('startUpload', function() {
+            $('#progress').show();
+            $('.progress-bar').css('width', '0%');
+            $('.progress-bar').text('0%');
+            $('.progress-bar').removeClass('progress-bar-danger progress-bar-success');
+            $('.progress-bar').addClass('active progress-bar-striped');
+            $('.progress').show();
+
+
+        });
+        uploader.on('uploadProgress', function(file, percentage) {
+            $('.progress-bar').css('width', percentage * 100 - 1 + '%');
+            $('.progress-bar').text(Math.floor(percentage * 100 - 1) + '%');
+        });
+        uploader.on('uploadSuccess', function(file,response) {
+            $('.progress-bar').css('width', '100%');
+            $('.progress-bar').text('100%');
+            $('.progress-bar').addClass('progress-bar-success');
+            $('.progress-bar').text('上传完成');
+            // console.log(response.image_path);
+            $('[name="showimg"]').show();
+
+            var imgurl = '/static'+ response.fullName;
+            $('#cover').val(imgurl);
+
+            $('[name="showimg"]').find('img').attr({
+                src: imgurl
+            });
+        });
+        uploader.on('uploadError', function(file) {
+            $('.progress-bar').css('width', '100%');
+            $('.progress-bar').text('100%');
+            $('.progress-bar').addClass('progress-bar-danger');
+            $('.progress-bar').text('上传失败');
+        });
+        uploader.on('uploadComplete', function(file) {
+            $('.progress-bar').removeClass('active progress-bar-striped');
+        });
+
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="../bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

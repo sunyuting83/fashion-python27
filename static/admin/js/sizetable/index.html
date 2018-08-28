@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>尺码表</title>
+		<link href="./css/sizetable.css?v=1.0.1" rel="stylesheet">
+	</head>
+	<body>
+		<div class="operation">
+			<div id="row-plus"><i class="icon icon-row-plus"></i>加一行</div>
+			<div id="col-plus"><i class="icon icon-col-plus"></i>加一列</div>
+			<div id="row-minus"><i class="icon icon-row-minus"></i>减一行</div>
+			<div id="col-minus"><i class="icon icon-col-minus"></i>减一列</div>
+			<div id="styles"><i class="icon icon-style"></i>选择样式</div>
+			<div id="styls-more">
+				<span class="style1" data-style=""><i class="icon icon-style"></i>样式1</span>
+				<span class="style1" data-style="shsl-dark"><i class="icon icon-style1"></i>样式2</span>
+				<span class="style2" data-style="shsl-ddd"><i class="icon icon-style2"></i>样式3</span>
+				<span class="style3" data-style="sh-dark"><i class="icon icon-style3"></i>样式4</span>
+				<span class="style4" data-style="sh-ddd"><i class="icon icon-style4"></i>样式5</span>
+				<span class="style5" data-style="bgcolor-dark"><i class="icon icon-style5"></i>样式6</span>
+				<span class="style6" data-style="bgcolor-dark-sl"><i class="icon icon-style6"></i>样式7</span>
+				<span class="style7" data-style="sh-dark-bg"><i class="icon icon-style7"></i>样式8</span>
+				<span class="style8" data-style="sh-ddd-bg"><i class="icon icon-style8"></i>样式9</span>
+				<em class="close"><i class="icon icon-style-close"></i></em>
+			</div>
+			<div class="saveimg"><i class="icon icon-img-down"></i>保存图片</div>
+		</div>
+		<div class="size-table" id="size-table">
+			<ul>
+				<li><input type="text" value="Size"></li>
+				<li><input type="text" value="Bust"></li>
+				<li><input type="text" value="Waist"></li>
+				<li><input type="text" value="Hip"></li>
+			</ul>
+			<ul>
+				<li><input type="text" value="S"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+			</ul>
+			<ul>
+				<li><input type="text" value="M"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+			</ul>
+			<ul>
+				<li><input type="text" value="L"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+			</ul>
+			<ul>
+				<li><input type="text" value="XL"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+				<li><input type="text" value="0"></li>
+			</ul>
+		</div>
+
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/html2canvas.js"></script>
+	<script type="text/javascript">
+		$(document).ready( function(){
+			$('.size-table').each(function() {
+
+				// 减一行
+				$('#row-minus').click(function() {
+					var rowNB = $('.size-table').find('ul').length;
+					if(rowNB!==1) {
+						$(".size-table").children('ul:last').detach();
+					}
+
+				});
+				// 减一列
+				$('#col-minus').click(function() {
+					var colNB = $('.size-table').children('ul:first').children('li').length;
+					if(colNB!==1) {
+						$('.size-table').children('ul').each(function() {
+							$(this).children('li:last').detach();
+						});
+					}
+				});
+
+				// 加一行
+				$('#row-plus').click(function() {
+					$(".size-table").children('ul:first').clone(false).appendTo('.size-table');
+				});
+				// 加一列
+				$('#col-plus').click(function() {
+					$(".size-table").children('ul:first').children('li:first').clone(false).appendTo('.size-table ul');
+				});
+
+				// 显示样式
+				$('#styles').click(function(event) {
+					$(this).siblings('#styls-more').toggleClass('active');
+					$(this).toggleClass('cuur');
+				});
+				// 关闭样式选择
+				$('.close').click(function(event) {
+					$(this).parents('#styls-more').removeClass('active');
+					$(this).parents('#styls-more').siblings('#styles').removeClass('cuur');
+				});
+
+				// 样式选择
+				$('.operation').find('#styls-more').children('span').click(function(event) {
+					var removeclass = $(this).parents('.operation').siblings('.size-table').attr('class');
+					var styleData = $(this).data('style');
+					$(this).parents('.operation').siblings('.size-table').removeClass(removeclass).addClass(styleData).addClass('size-table');
+				});
+				
+			});
+
+			// 截取屏幕并保存图片
+			$(".saveimg").on("click", function(event) {
+					var index = parent.layer.getFrameIndex(window.name);
+                	event.preventDefault();
+                	html2canvas(document.getElementById("size-table"), {
+                	allowTaint: true,
+                	taintTest: false,
+                	onrendered: function(canvas) {
+                    	canvas.id = "mycanvas";
+                    	//document.body.appendChild(canvas);
+                    	//生成base64图片数据
+                    	var dataUrl = canvas.toDataURL();
+                    	// console.log(dataUrl);
+						parent.$('#size_table').val(dataUrl);
+						parent.$('[name="sizetable"]').text('重新制作');
+
+						// 尺码表制作后显示
+			            var sizeimg = parent.$('[name="sizeimg"]');
+			            sizeimg.attr({'src':dataUrl});
+			            sizeimg.show();
+
+					    parent.layer.close(index);
+                    	// var newImg = document.createElement("img");
+                    	// newImg.src =  dataUrl;
+                    	// document.body.appendChild(newImg);
+                    	//将mime-type改为image/octet-stream，强制让浏览器直接download
+		                // var _fixType = function (type) {
+		                //     type = type.toLowerCase().replace(/jpg/i, 'jpeg');
+		                //     var r = type.match(/png|jpeg|bmp|gif/)[0];
+		                //     return 'image/' + r;
+		                // };
+		                // var saveFile = function (data, filename) {
+		                //     var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+		                //     save_link.href = data;
+		                //     save_link.download = filename;
+		                //     var event = document.createEvent('MouseEvents');
+		                //     event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		                //     save_link.dispatchEvent(event);
+		                // };
+		                // var imgData = canvas.toDataURL("png");
+		                // imgData = imgData.replace(_fixType("png"), 'image/octet-stream');//base64
+		                // saveFile(imgData, "sizetable" + new Date().getTime() + "." + "png");
+                	}
+            	});
+        	});
+		});
+	</script>
+	</body>
+</html>

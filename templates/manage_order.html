@@ -1,0 +1,309 @@
+{% if current_user.group.power <= 2 and current_user.group.power >= 0 %}
+{% extends "base.html" %}
+    {% block css %}
+        <style type="text/css">
+            .blue {color:#2494F2;}
+            .red {color:#E23923}
+            .yellow {}
+            .orange {}
+            .green {}
+        </style>
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+		{% if order_type == 0 %}
+                <h2>商品订单管理</h2>
+		{% else %}
+		<h2>借调订单管理</h2>
+		{% endif %}
+		
+                <ol class="breadcrumb">
+		{% if order_type == 0 %}
+		<li class="active">商品订单管理</li>		{% else %}
+		<li class="active">借调订单管理</li>		{% endif %}
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right margin-left10" style="width:230px">
+                        <form class="form-horizontal group-border-dashed" action="{{url_for('manage.manage_order', order_type = order_type, state = state, page = 1)}}" method="get" name="manage_order" style="border-radius: 0px;">
+                            <div class="input-group">
+                                <input type="text" name="ordernb" class="form-control" placeholder="请输入订单编号">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        订单筛选 <span class="caret"></span>
+                        </button>
+                        {% if order_type == 0 %}
+                        <ul class="dropdown-menu" role="menu">
+                            <li {% if state == 0 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 0, page = 1)}}">等待确认的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 1 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 1, page = 1)}}">客户已付定金的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 2 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 2, page = 1)}}">已经开始面料采购的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 3 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 3, page = 1)}}">面料已经到位，开始裁剪或织造。的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 4 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 4, page = 1)}}">大货中查的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 5 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 5, page = 1)}}">大货尾查的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 6 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 6, page = 1)}}">预计出货的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 7 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 7, page = 1)}}">确定仓位的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 8 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 8, page = 1)}}">需要支付中期款的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 9 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 9, page = 1)}}">已支付中期款的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 10 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 10, page = 1)}}">货物已经启运的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 11 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 11, page = 1)}}">货物已经出中国海关的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 12 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 12, page = 1)}}">货物已经到意大利海关的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 13 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 13, page = 1)}}">货物预计几号到达的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 14 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 14, page = 1)}}">未支付尾款10%的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 15 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 15, page = 1)}}">已完成的订单</a></li>
+                        </ul>
+                        {% else %}
+                        <ul class="dropdown-menu" role="menu">
+                            <li {% if state == 0 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 0, page = 1)}}">等待确认的借调订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 1 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 1, page = 1)}}">已确认借调样品的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 2 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 2, page = 1)}}">样品已经发出的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 3 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 3, page = 1)}}">样品已经出中国海关的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 4 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 4, page = 1)}}">样品已经到意大利海关的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 5 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 5, page = 1)}}">样品准备派件的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 6 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 6, page = 1)}}">样品在海关，需要缴纳关税方可派件的订单</a></li>
+                            <li class="divider"></li>
+                            <li {% if state == 7 %}class="active"{% endif %}><a href="{{url_for('manage.manage_order', order_type = order_type, state = 7, page = 1)}}">样品订单已完成的订单</a></li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <div class="header">
+                        <h3>
+                            {% if order_type == 0 %}
+                                {% if state == 0 %}
+                                等待确认的订单
+                                {% elif state == 1 %}
+                                客户已付定金的订单
+                                {% elif state == 2 %}
+                                已经开始面料采购的订单
+                                {% elif state == 3 %}
+                                面料已经到位，开始裁剪或织造的订单
+                                {% elif state == 4 %}
+                                大货中查的订单
+                                {% elif state == 5 %}
+                                大货尾查的订单
+                                {% elif state == 6 %}
+                                预计出货的订单
+                                {% elif state == 7 %}
+                                确定仓位的订单
+                                {% elif state == 8 %}
+                                需要支付中期款的订单
+                                {% elif state == 9 %}
+                                已支付中期款的订单
+                                {% elif state == 10 %}
+                                货物已经启运的订单
+                                {% elif state == 11 %}
+                                货物已经出中国海关的订单
+                                {% elif state == 12 %}
+                                货物已经到意大利海关的订单
+                                {% elif state == 13 %}
+                                货物预计几号到达的订单
+                                {% elif state == 14 %}
+                                未支付尾款10%的订单
+                                {% elif state == 15 %}
+                                已完成的订单
+                                {% endif %}
+                            {% else %}
+                                {% if state == 0 %}
+                                等待确认的订单
+                                {% elif state == 1 %}
+                                已确认借调样品的订单
+                                {% elif state == 2 %}
+                                样品已经发出的订单
+                                {% elif state == 3 %}
+                                样品已经出中国海关的订单
+                                {% elif state == 4 %}
+                                样品已经到意大利海关的订单
+                                {% elif state == 5 %}
+                                样品准备派件的订单
+                                {% elif state == 6 %}
+                                样品在海关，需要缴纳关税方可派件的订单
+                                {% elif state == 7 %}
+                                样品订单已完成的订单
+                                {% endif %}
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="content">
+
+                    {% if orderlist %}
+                        {% for od in orderlist %}
+                        <table style="margin-bottom: 15px">
+                            <thead>
+                                <tr style="background:#D9EDF7">
+                                    <th colspan="5">
+                                        订单编号：<b class="blue">{{od.number}}</b>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3">
+                                        订单更新时间：<font>{{od.uptime}}</font>
+                                    </th>
+                                    <th colspan="2" class="text-right">
+                                        订单状态：
+                                        {% if od.order_type == 0 %}
+                                            {% if od.state == 0 %}
+                                                <font class="red">等待确认订单</font>
+                                            {% elif od.state == 1 %}
+                                                客户已付定金
+                                            {% elif od.state == 2 %}
+                                                已经开始面料采购
+                                            {% elif od.state == 3 %}
+                                                面料已经到位，开始裁剪或织造。
+                                            {% elif od.state == 4 %}
+                                                大货中查
+                                            {% elif od.state == 5 %}
+                                                大货尾查
+                                            {% elif od.state == 6 %}
+                                                预计出货时间，体积，重量，运输方式
+                                            {% elif od.state == 7 %}
+                                                确定仓位，几号入仓
+                                            {% elif od.state == 8 %}
+                                                你需要支付中期款60%方可发货。
+                                            {% elif od.state == 9 %}
+                                                你的中期款已经支付，多少金额。你的货物可以如期发出。
+                                            {% elif od.state == 10 %}
+                                                你的货物已经启运，附具体发货清单
+                                            {% elif od.state == 11 %}
+                                                你的货物已经出中国海关
+                                            {% elif od.state == 12 %}
+                                                你的货物已经到意大利海关，准备清关
+                                            {% elif od.state == 13 %}
+                                                你的货物预计几号到达，请准备收货工作
+                                            {% elif od.state == 14 %}
+                                                请支付尾款10%以完成订单。
+                                            {% elif od.state == 15 %}
+                                                你的订单已完成，谢谢你的配合。
+                                            {% endif %}
+                                        {% else %}
+                                            {% if od.state == 0 %}
+                                                等待确认订单
+                                            {% elif od.state == 1 %}
+                                                已确认借调样品
+                                            {% elif od.state == 2 %}
+                                                样品已经发出
+                                            {% elif od.state == 3 %}
+                                                样品已经出中国海关
+                                            {% elif od.state == 4 %}
+                                                样品已经到意大利海关
+                                            {% elif od.state == 5 %}
+                                                样品准备派件
+                                            {% elif od.state == 6 %}
+                                                样品在海关，需要缴纳关税方可派件
+                                            {% elif od.state == 7 %}
+                                                样品订单完成
+                                            {% endif %}
+                                        {% endif %}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="width:30%">下单客户</th>
+                                    <th style="width:10%">联系人</th>
+                                    <th style="width:15%">联系电话</th>
+                                    <th style="width:20%">下单时间</th>
+                                    <th class="text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{od.users.company}}</td>
+                                    <td>{{od.users.truename}}</td>
+                                    <td>{{od.users.phone}}</td>
+                                    <td>
+                                        {{od.addtime}}
+                                    </td>
+                                    <td class="text-right">
+                                        <a class="btn btn-warning btn-sm" href="{{url_for('manage.view_order', order_type = order_type, state = state, page = previous, id=od.id)}}">
+                                            <i class="fa fa-tags"></i>
+                                            查看订单详细
+                                        </a>
+                                        {% if od.orderexcel.id %}
+                                        <a class="btn btn-info btn-sm" href="#" onclick="window.open('/{{od.orderexcel.excelpath}}')">
+                                            <i class="fa fa-download"></i>
+                                            下载Excel
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endfor %}
+                    {% else %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="text-center danger"><h3>没有数据</h3></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <ul class="pagination pagination-lg">
+                    {% if page %}
+                        <li><a href="{{url_for('manage.manage_order', order_type = order_type, state = state, page = previous)}}">«</a></li>
+                        {% for pages in page %}
+                            <li><a href="{{url_for('manage.manage_order', order_type = order_type, state = state, page = pages)}}">{{pages}}</a></li>
+                        {% endfor %}
+                        <li><a href="{{url_for('manage.manage_order', order_type = order_type, state = state, page = nextp)}}">»</a></li>
+                    {% endif %}
+                    </ul>
+                </div>
+                    
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+<script type="text/javascript">
+
+    // 删除用户
+    $('[name="del"]').click(function(event) {
+        var geturl = "/manage/del_order";
+        var getdata = {
+            id: $(this).data('id')
+        };
+        var active = '删除';
+        LockLayer(active,geturl,getdata)
+    });
+    // 调用分页函数
+    pagination("{{page_cont}}");
+    
+    
+</script>
+{% endblock %}
+{% endif %}

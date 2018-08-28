@@ -1,0 +1,675 @@
+{% if current_user.group.power <= 2 and current_user.group.power >= 0 %}
+{% extends "base.html" %}
+    {% block css %}
+        <style type="text/css">
+            .blue {color:#2494F2;}
+            .red {color:#E23923}
+            .yellow {}
+            .orange {}
+            .green {color:#60C060}
+        </style>
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>订单管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">查看订单详细</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="javascript:history.back()" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 返回</a>
+                    </div>
+                    <div class="pull-right" style="margin-right: 10px;width: 340px">
+                    {% if orderview.order_type == 0 %}
+                        {% if orderview.state == 15 %}
+                        {% else %}
+                        <select class="select2">
+                            <option value="">更新订单状态</option> 
+                            {% if orderview.state <= 0 %}
+                            <option value="1">客户已付定金</option>
+                            {% endif %}
+                            {% if orderview.state <= 1 %}
+                            <option value="2">已经开始面料采购</option>
+                            {% endif %}
+                            {% if orderview.state <= 2 %}
+                            <option value="3">面料已经到位，开始裁剪或织造</option>
+                            {% endif %}
+                            {% if orderview.state <= 3 %}
+                            <option value="4">大货中查</option>
+                            {% endif %}
+                            {% if orderview.state <= 4 %}
+                            <option value="5">大货尾查</option>
+                            {% endif %}
+                            {% if orderview.state <= 5 %}
+                            <option value="6">预计出货时间，体积，重量，运输方式</option>
+                            {% endif %}
+                            {% if orderview.state <= 6 %}
+                            <option value="7">确定仓位，几号入仓</option>
+                            {% endif %}
+                            {% if orderview.state <= 7 %}
+                            <option value="8">你需要支付中期款60%方可发货</option>
+                            {% endif %}
+                            {% if orderview.state <= 8 %}
+                            <option value="9">你的中期款已经支付，多少金额。你的货物可以如期发出。</option>
+                            {% endif %}
+                            {% if orderview.state <= 9 %}
+                            <option value="10">你的货物已经启运，附具体发货清单</option>
+                            {% endif %}
+                            {% if orderview.state <= 10 %}
+                            <option value="11">你的货物已经出中国海关</option>
+                            {% endif %}
+                            {% if orderview.state <= 11 %}
+                            <option value="12">你的货物已经到意大利海关，准备清关</option>
+                            {% endif %}
+                            {% if orderview.state <= 12 %}
+                            <option value="13">你的货物预计几号到达，请准备收货工作</option>
+                            {% endif %}
+                            {% if orderview.state <= 13 %}
+                            <option value="14">请支付尾款10%以完成订单</option>
+                            {% endif %}
+                            {% if orderview.state <= 14 %}
+                            <option value="15">你的订单已完成，谢谢你的配合</option>
+                            {% endif %}
+                        </select>
+                        {% endif %}
+                    {% else %}
+                        <select class="select2">
+                            <option value="">更新订单状态</option>
+                            {% if orderview.state <= 0 %}
+                            <option value="1">已确认借调样品</option>
+                            {% endif %}
+                            {% if orderview.state <= 1 %}
+                            <option value="2">样品已经发出</option>
+                            {% endif %}
+                            {% if orderview.state <= 2 %}
+                            <option value="2">样品已经出中国海关</option>
+                            {% endif %}
+                            {% if orderview.state <= 3 %}
+                            <option value="2">样品已经到意大利海关</option>
+                            {% endif %}
+                            {% if orderview.state <= 4 %}
+                            <option value="2">样品准备派件</option>
+                            {% endif %}
+                            {% if orderview.state <= 5 %}
+                            <option value="2">样品在海关，需要缴纳关税方可派件</option>
+                            {% endif %}
+                            {% if orderview.state <= 6 %}
+                            <option value="2">样品订单完成</option>
+                            {% endif %}
+                        </select>
+                    {% endif %}
+                    </div>
+                    <div class="header">
+                        <h3>查看订单详细</h3>
+                    </div>
+                    <div class="content">
+                    {% if orderview %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        订单编号：<b class="blue">{{orderview.number}}</b>
+                                        <input id="thisid" type="hidden" value="{{orderview.id}}" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 50%">
+                                        订单更新时间：<b>{{orderview.uptime}}</b>
+                                    </th>
+                                    <th style="width: 50%">
+                                        订单状态：
+                                        {% if orderview.order_type == 0 %}
+                                            {% if orderview.state == 0 %}
+                                                <span class="red">等待确认订单</span>
+                                            {% elif orderview.state == 1 %}
+                                                {% for text in orderview.orderstate  %}
+                                                    {% if text.state == orderview.state %}
+                                                        <span>客户已付定金：<b class="red">{{text.text}}</b></span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% elif orderview.state == 2 %}
+                                                已经开始面料采购
+                                            {% elif orderview.state == 3 %}
+                                                面料已经到位，开始裁剪或织造。
+                                            {% elif orderview.state == 4 %}
+                                                大货中查
+                                            {% elif orderview.state == 5 %}
+                                                大货尾查
+                                            {% elif orderview.state == 6 %}
+                                                {% for text in orderview.orderstate  %}
+                                                    {% if text.state == orderview.state %}
+                                                    <div name="thdata" data-thdata="{{text.text}}">预计出货时间：<i id="time"></i>，体积：<i id="tji"></i>，重量：<i id="zl"></i>，运输方式：<i id="ysfs"></i></div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% elif orderview.state == 7 %}
+                                                {% for text in orderview.orderstate  %}
+                                                    {% if text.state == orderview.state %}
+                                                    确定仓位，{{text.text}}号入仓
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% elif orderview.state == 8 %}
+                                                你需要支付中期款60%方可发货。
+                                            {% elif orderview.state == 9 %}
+                                                
+                                                {% for text in orderview.orderstate  %}
+                                                    {% if text.state == orderview.state %}
+                                                    你的中期款已经支付，{{text.text}}。你的货物可以如期发出。
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% elif orderview.state == 10 %}
+                                                你的货物已经启运，附具体发货清单
+                                            {% elif orderview.state == 11 %}
+                                                你的货物已经出中国海关
+                                            {% elif orderview.state == 12 %}
+                                                你的货物已经到意大利海关，准备清关
+                                            {% elif orderview.state == 13 %}
+                                                {% for text in orderview.orderstate  %}
+                                                    {% if text.state == orderview.state %}
+                                                    你的货物预计{{text.text}}到达，请准备收货工作
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            {% elif orderview.state == 14 %}
+                                                请支付尾款10%以完成订单。
+                                            {% elif orderview.state == 15 %}
+                                                <b class="green">你的订单已完成，谢谢你的配合。</b>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if orderview.state == 0 %}
+                                                等待确认订单
+                                            {% elif orderview.state == 1 %}
+                                                已确认借调样品
+                                            {% elif orderview.state == 2 %}
+                                                样品已经发出
+                                            {% elif orderview.state == 3 %}
+                                                样品已经出中国海关
+                                            {% elif orderview.state == 4 %}
+                                                样品已经到意大利海关
+                                            {% elif orderview.state == 5 %}
+                                                样品准备派件
+                                            {% elif orderview.state == 6 %}
+                                                样品在海关，需要缴纳关税方可派件
+                                            {% elif orderview.state == 7 %}
+                                                <b class="green">样品订单完成</b>
+                                            {% endif %}
+                                        {% endif %}
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table style="margin-top: 10px">
+                            <thead>
+                                <tr>
+                                    <th colspan="4"><span>客户信息</span></th>
+                                </tr>
+                                <tr>
+                                    <th>下单客户</th>
+                                    <th>联系人</th>
+                                    <th>联系电话</th>
+                                    <th>下单时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{orderview.users.company}}</td>
+                                    <td>{{orderview.users.truename}}</td>
+                                    <td>{{orderview.users.phone}}</td>
+                                    <td>
+                                        {{orderview.addtime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table style="margin-top: 10px">
+                            <thead>
+                                <tr>
+                                    <th colspan="4"><span>收货地址</span></th>
+                                </tr>
+                                <tr>
+                                    <th>联系人</th>
+                                    <th>联系电话</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{orderview.od_address.contacts}}</td>
+                                    <td>{{orderview.od_address.phone_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">地址：{{orderview.od_address.address}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table style="margin-top: 10px">
+                            <thead>
+                                <tr>
+                                    <th colspan="8"><span>订单产品信息列表</span></th>
+                                </tr>
+                                <tr>
+                                    <th style="width:10%">产品图片</th>
+                                    <th style="width:26%">产品名称</th>
+                                    <th style="width:14%">产品编号</th>
+                                    <th style="width:10%">颜色</th>
+                                    <th style="width:10%">尺码</th>
+                                    <th style="width:12%">数量</th>
+                                    <th style="width:12%" class="text-right">单价</th>
+                                    <th style="width:14%" class="text-right">尺码总价</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ord in orderview.orderall %}
+                                <tr>
+                                    <td>
+                                        {% if ord.products.colors %}
+                                            {% for color in ord.products.colors %}
+                                            {% if loop.first %} <!-- 获取列表第一条 -->
+                                                {% for pic in color.colorpic %}
+                                                    {% if loop.first %}
+                                                    <img src="" name="piclist" data-thsrc="{{pic.picurl}}">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ord.products.proname}}</td>
+                                    <td>{{ord.pronumber}}</td>
+                                    <td>{{ord.color}}</td>
+                                    <td>{{ord.size}}</td>
+                                    <td>{{ord.unit}}</td>
+                                    <td class="text-right">{{ord.price}}</td>
+                                    <td class="text-right">{{ord.color_total}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8" class="text-right"><h4>订单总价：<span class="red">{{orderview.order_total}}</span></h4></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="text-center danger"><h3>没有数据</h3></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    {% endif %}
+                    </div>
+                </div>
+                    
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script src="{{url_for('static',filename='admin/js/laydate/laydate.js')}}"></script>
+<script type="text/javascript">
+
+    $('[name="piclist"]').each(function(index, el) {
+        var src = $(this).data('thsrc');
+        var thisrc = '';
+        var thisrcs = new Array(); //定义一数组 
+        thisrcs = src.split(','); //字符分割 
+        for (i = 0;i < thisrcs.length ;i++ ) {
+            $(this).attr('src',thisrcs[3]);
+        };
+    });
+
+    // 弹出函数
+    function UpLayer(active,geturl,getdata,post=false){
+        layer.confirm('您确定要'+active+'？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            // console.log(getdata);
+            var activate = '';
+            if(post == true) {
+                activate    = 'post';
+                traditional = true;
+            }else{
+                activate    = 'get';
+                traditional = false;
+            };
+            $.ajax({ 
+                type: activate, 
+                url: geturl,
+                data: getdata,
+                dataType: 'json',
+                traditional: traditional,
+                beforeSend:function(XMLHttpRequest){ 
+                    layer.load(1, {
+                      shade: [0.1,'#fff']
+                    });
+                }, 
+                success:function(data,textStatus){ 
+                    if(data.state == 'ok'){
+                        layer.msg(active+'成功', {icon: 1});
+                        return window.location.reload()
+                    }else{
+                        layer.confirm(active+'失败', {
+                            btn: ['点击刷新']
+                        },function(){
+                            return window.location.reload()
+                        });
+                    }
+                }, 
+                complete:function(XMLHttpRequest,textStatus){ 
+                    //HideLoading(); 
+                }, 
+                error:function(){ 
+                    //请求出错处理 
+                } 
+            });
+            
+        });
+    };
+
+    {% if orderview.order_type == 0 %}
+        function opendate($this) {
+            laydate.render({
+                elem: $this,
+                calendar: true
+            });
+        };
+        var th6 = $('[name="thdata"]');
+        th6.find('i').css({'font-style':'initial'});
+        if (th6.length > 0){
+            var thdate = th6.data('thdata');
+            var strs= new Array(); //定义一数组 
+            strs = thdate.split("|||"); //字符分割 
+            for (i=0;i<strs.length ;i++ ) {
+                th6.find('#time').text(strs[0]);
+                th6.find('#tji').text(strs[1]);
+                th6.find('#zl').text(strs[2]);
+                th6.find('#ysfs').text(strs[3]);
+            };
+        };
+        
+        $(".select2").on("select2-selecting",function(e){
+            var state = e.val;
+            var geturl = "/manage/up_order";
+            var post = true;
+            var getdata = {
+                "orderid":"{{orderview.id}}",
+                "state":state,
+                "message": e.object.text,
+                "ordertype": 0
+            };
+            var active = '订单状态更新至' + e.object.text;
+            switch(state) {
+                case '0':
+                    break;
+                case '1':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">订金金额：</label><div class="col-sm-8"><input type="number" id="djje" class="form-control"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['480px', '200px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var djje = $('#djje').val();
+                            if (djje == '') {
+                                layer.msg('请填订金金额');
+                            } else {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":djje,
+                                    "ordertype": 0
+                                };
+                                active = '更新订单状态';
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                case '2':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '3':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '4':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '5':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '6':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">预计发货时间：</label><div class="col-sm-8"><input type="text" id="fatime" class="form-control" onclick="opendate(fatime)" placeholder="yyyy-MM-dd"></div></div><div class="form-group"><label class="col-sm-4 control-label">体积：</label><div class="col-sm-8"><input type="text" id="tiji" class="form-control"></div></div><div class="form-group"><label class="col-sm-4 control-label">重量：</label><div class="col-sm-8"><input type="text" id="zhongliang" class="form-control"></div></div><div class="form-group"><label class="col-sm-4 control-label">运输方式：</label><div class="col-sm-8"><input type="text" id="yunshu" class="form-control"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['480px', '430px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var fatime = $('#fatime').val(), tiji = $('#tiji').val(), zhongliang = $('#zhongliang').val(), yunshu = $('#yunshu').val();
+                            if (fatime == '') {
+                                layer.msg('请选择日期');
+                            } else if(tiji == "") {
+                                layer.msg('请填写体积');
+                            } else if(zhongliang == "") {
+                                layer.msg('请填写重量');
+                            } else if(yunshu == "") {
+                                layer.msg('请填写运输方式：');
+                            }else if(fatime != null && tiji != null && zhongliang != null && yunshu != null) {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":fatime+'|||'+tiji+'|||'+zhongliang+'|||'+yunshu,
+                                    "ordertype": 0
+                                };
+                                active = '更新订单状态';
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                case '7':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">几号入仓：</label><div class="col-sm-8"><input type="text" id="rucang" class="form-control"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['480px', '200px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var rucang = $('#rucang').val();
+                            if (rucang == '') {
+                                layer.msg('请填写入仓号');
+                            } else {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":rucang,
+                                    "ordertype": 0
+                                };
+                                active = '更新订单状态';
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                case '8':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '9':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">中期款金额：</label><div class="col-sm-8"><input type="number" id="zqje" class="form-control"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['480px', '200px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var zqje = $('#zqje').val();
+                            if (zqje == '') {
+                                layer.msg('请填写入仓号');
+                            } else {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":zqje,
+                                    "ordertype": 0
+                                };
+                                active = '更新订单状态';
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                case '10':
+                    layer.open({
+                        type: 2,
+                        title: '上传发货清单',
+                        shadeClose: true,
+                        shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['330px', '230px'],
+                        content: "{{url_for('static',filename='admin/js/webuploader/upexcel.html')}}",
+                        success: function(layero, index){
+                            var body = layer.getChildFrame('body',index);//建立父子联系
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            body.find('#orderid').val("{{orderview.id}}");
+                            body.find('#state').val(state);
+                            body.find('#email').val("{{orderview.users.mail}}");
+                        }
+                    });
+                    
+                    break;
+                case '11':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '12':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '13':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">预计到达时间：</label><div class="col-sm-8"><input type="text" id="yjddrq" class="form-control" onclick="opendate(yjddrq)" placeholder="yyyy-MM-dd"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['330px', '230px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var yjddrq = $('#yjddrq').val();
+                            if (yjddrq == '') {
+                                layer.msg('请填预计到达日期');
+                            } else {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":yjddrq,
+                                    "ordertype": 0
+                                };
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                case '14':
+                    UpLayer(active,geturl,getdata,post);
+                    break;
+                case '15':
+                    var teamlist = ('<div class="form-horizontal group-border-dashed"><div class="form-group"><label class="col-sm-4 control-label">尾款金额：</label><div class="col-sm-8"><input type="number" id="wkje" class="form-control"></div></div></div>'
+                    );
+                    layer.open({
+                        type: 1,
+                        title: '填写相关信息',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['480px', '200px'], //宽高
+                        content: teamlist,
+                        btn: ['确定','取消'], //按钮
+                        btn1: function(index, layero){
+                            var wkje = $('#wkje').val();
+                            if (wkje == '') {
+                                layer.msg('请填写尾款金额');
+                            } else {
+                                getdata = {
+                                    "orderid":"{{orderview.id}}",
+                                    "state":state,
+                                    "text":wkje,
+                                    "ordertype": 0
+                                };
+                                active = '更新订单状态';
+                                // layer.close()
+                                UpLayer(active,geturl,getdata,post)
+                            }
+                            
+                        },
+                        btn2: function(index, layero) {
+                            layer.close()
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+        });
+    {% else %}
+        $(".select2").on("select2-selecting",function(e){
+        　　console.log(e);
+            var state = e.val;
+            if (state != null && state != '') {
+                var geturl = "/manage/up_order";
+                var post = true;
+                var getdata = {
+                    "orderid":"{{orderview.id}}",
+                    "state":state,
+                    "ordertype": 1
+                };
+                var active = '更新订单状态';
+                LockLayer(active,geturl,getdata,post)
+            }
+        });
+    {% endif %}
+    
+    
+</script>
+{% endblock %}
+{% endif %}

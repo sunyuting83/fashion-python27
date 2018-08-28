@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+    {% block css %}
+        <style type="text/css">
+            .tab-content {
+                margin-bottom: 0px;
+                border-top: 1px solid #43A0F2
+            }
+            .nav-tabs > li.active {
+                bottom: -1px;
+            }
+            #upimgshow {display: none}
+            #upimgshow > li {
+                list-style: none;
+                float:left;
+                padding:5px;
+                margin-left: 15px;
+                width: 110px;
+                height: 110px;
+                overflow: hidden;
+            }
+            #upimgshow > li img {
+                width: 110px;
+                min-height: 110px;
+
+            }
+            .tab-pane {
+                position: relative;
+            }
+            .tab-pane .remove {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+            }
+        </style>
+    {% endblock %}
+
+    {% block content %}
+        
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>产品管理</h2>
+                    <div class="pull-right">
+                        <a href="manage_product?pid={{productData.pid}}" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                <ol class="breadcrumb">
+                    <li class="active">产品管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+        {% if productData %}
+            <div class="col-sm-12 col-md-6">
+                <div class="block-flat">
+                    <div class="header">
+                        <h3>基本信息</h3>
+                    </div>
+                    <div class="content">
+                        <table class="no-border">
+                            <tbody class="no-border-x">
+                                <tr>
+                                    <td style="width:30%;">所属分类</td>
+                                    <td>{{productData.product_class.classname}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">产品名称</td>
+                                    <td>{{productData.proname}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">价格</td>
+                                    <td>${{productData.price}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">简单介绍</td>
+                                    <td>{{productData.text_centont}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">尺码</td>
+                                    <td>{{productData.size}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">模特身高</td>
+                                    <td>{{productData.model_height}}厘米</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">面料</td>
+                                    <td>{{productData.fabric}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">里料</td>
+                                    <td>{{productData.lining}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">单件净重</td>
+                                    <td>{{productData.weights}}g</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">单件毛重</td>
+                                    <td>{{productData.the_net}}g</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="block-flat">
+                    <div class="header">
+                        <h3>货期与运输</h3>
+                    </div>
+                    <div class="content">
+                        <table class="no-border">
+                            <tbody class="no-border-x">
+                                <tr>
+                                    <td style="width:30%;">货期-首单</td>
+                                    <td>{{productData.first_order}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">货期-翻单</td>
+                                    <td>${{productData.again_order}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">运输周期-海运</td>
+                                    <td>{{productData.shipping}}天</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">运输周期-空运</td>
+                                    <td>{{productData.flying}}天</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">产地</td>
+                                    <td>{{productData.place}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="block-flat">
+                    <div class="header">
+                        <h3>尺码表</h3>
+                    </div>
+                    <div class="content">
+                        <img src="{{productData.size_table}}" />
+                    </div>
+                </div>
+                <div class="block-flat">
+                    <div class="header">
+                        <h3>洗涤说明</h3>
+                    </div>
+                    <div class="content">
+                        {% if washlist %}
+                            {% for wash in washlist %}
+                                <table class="no-border">
+                                    <tbody class="no-border-x">
+                                        <tr>
+                                            <td><img src="{{wash.icon}}" style="width: 20px;margin-left: 10px;" /> {{wash.text}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>          
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                    
+            </div>
+
+            {% if productData.colors %}
+            <div class="col-sm-12 col-md-12">
+                {% for color in productData.colors %}
+                <div class="block-flat">
+                    <div class="header">
+                        <h3>{{color.colortitle}}</h3>
+                    </div>
+                    <div class="content">
+                        <table class="no-border">
+                            <tbody class="no-border-x">
+                                <tr>
+                                    <td style="width:30%;">产品编号</td>
+                                    <td>{{color.number}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">颜色</td>
+                                    <td><div style="width: 36px;height: 14px;background:{{color.color}}"></div></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2">
+                                        {% for pic in color.colorpic|sort(attribute='sort') %}
+                                        <img src="" name="piclist" data-thsrc="{{ pic.picurl}}" />
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+            {% endif %}
+
+        {% endif %}
+            
+            
+            
+            
+            
+
+        </div>
+    </div>
+
+
+    
+ 
+    
+
+    {% endblock %}
+    {% block js %}
+        <script type="text/javascript">
+            $('[name="piclist"]').each(function(index, el) {
+                var src = $(this).data('thsrc');
+                var thisrc = '';
+                var thisrcs = new Array(); //定义一数组 
+                thisrcs = src.split(','); //字符分割 
+                for (i = 0;i < thisrcs.length ;i++ ) {
+                    $(this).attr('src',thisrcs[2]);
+                };
+            });
+        </script>
+
+    {% endblock %}
+

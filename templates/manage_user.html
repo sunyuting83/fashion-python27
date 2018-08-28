@@ -1,0 +1,176 @@
+{% if current_user.group.power <= 1  %}
+{% extends "base.html" %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>管理员管理</h2>
+                <ol class="breadcrumb">
+                    <li><a href="#">系统管理</a></li>
+                    <li class="active">管理员管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                
+                <div class="block-flat">
+                    <div class="pull-right margin-left10">
+                        <form class="form-horizontal group-border-dashed" action="/manage/search_admin" method="get" name="search_admin" style="border-radius: 0px;">
+                            <div class="input-group">
+                                <input type="text" name="username" class="form-control" placeholder="请输入用户名">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="pull-right">
+                        <a href="{{url_for('manage.add_admin')}}" type="button" class="btn btn-primary"><i class="fa fa-user"></i> 添加管理员</a>
+                        {% if current_user.group.power == 0  %}
+                        <a href="{{url_for('manage.manage_team')}}" type="button" class="btn btn-warning"><i class="fa fa-users"></i> 添加产品组</a>
+                        {% endif %}
+                    </div>
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        筛选 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{url_for('manage.manage_user', status = 0)}}">未锁定用户</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{url_for('manage.manage_user', status = 1)}}">被锁定用户</a></li>
+                        </ul>
+                    </div>
+                    <div class="header">
+                        <h3>管理员管理{{over}}</h3>
+                    </div>
+                    <div class="content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>所在组</th>
+                                    <th>职责</th>
+                                    <th>状态</th>
+                                    <th>登陆次数</th>
+                                    <th>最后登陆</th>
+                                    <th class="text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if userlist %}
+                                    {% for user in userlist %}
+                                    {% if user.id == current_user.id %}
+                                    {% else %}
+                                    <tr>
+                                        <td>{{user.id}}</td>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.team.title}}</td>
+                                        <td>
+                                            {% if user.purview == 0 %}
+                                            组长
+                                            {% elif user.purview == 1 %}
+                                            组员
+                                            {% elif user.purview == None %}
+                                            超级管理
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if user.status == 0 %}
+                                                正常
+                                            {% else %}
+                                                锁定
+                                            {% endif %}
+                                        </td>
+                                        <td>{{user.login_size}}</td>
+                                        <td>时间： {{user.last_login_time}} <br>IP   ： {{user.last_login_ip}}</td>
+                                        <td class="text-right">
+                                            <a class="btn btn-info btn-sm" href="/manage/edit_admin?id={{user.id}}">
+                                                <i class="fa fa-pencil"></i>
+                                                修改
+                                            </a> 
+
+                                            {% if user.id == current_user.id %}
+                                            {% else %}
+                                            <button class="btn btn-sm" name="lock" data-id="{{user.id}}" data-status="{{user.status}}">
+                                                <i class="fa fa-lock"></i>
+                                                锁定
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" name="del" data-id="{{user.id}}">
+                                                <i class="fa fa-times"></i>
+                                                删除
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan='7' class="text-center danger"><h3>没有数据</h3></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        // 删除用户
+        $('[name="del"]').click(function(event) {
+            var geturl = "/manage/del_admin";
+            var getdata = {
+                id: $(this).data('id')
+            };
+            var active = '删除';
+            LockLayer(active,geturl,getdata)
+        });
+
+        // 判断锁定状态
+        $('[name="lock"]').each(function(index, el) {
+            var ThisStatus = $(this).data('status');
+            if(ThisStatus == 0){
+                $(this).addClass('btn-warning')
+            }else{
+                $(this).removeClass('btn-warning').addClass('btn-success')
+            }
+        });
+        
+
+        // 锁定解锁用户
+        $('[name="lock"]').click(function(event) {
+            var geturl = "/manage/lock_admin";
+            var status = $(this).data('status');
+            var id = $(this).data('id');
+            
+            if(status == 0){
+                var getdata = {
+                    id: id,
+                    status: 1
+                };
+                var active = '锁定';
+                LockLayer(active,geturl,getdata)
+            }else{
+                var getdata = {
+                    id: id,
+                    status: 0
+                };
+                var active = '解锁';
+                LockLayer(active,geturl,getdata)
+            };
+        });
+        
+        
+    </script>
+{% endblock %}
+{% endif %}

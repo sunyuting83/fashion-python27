@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin/js/jquery.niftymodals/css/component.css') }}?v=1.0" />
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>客户管理</h2>
+                <ol class="breadcrumb">
+                    {% if pagename == 'reg_customers' %}
+                    <li class="active">客户注册审核</li>
+                    {% else %}
+                    <li class="active">客户管理</li>
+                    {% endif %}
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right margin-left10">
+                        <form class="form-horizontal group-border-dashed" action="/manage/manage_customers" method="get" name="manage_customers" style="border-radius: 0px;">
+                            <div class="input-group">
+                                <input type="hidden" name="verify" id="verify" value="{{verify}}">
+                                <input type="text" name="search" class="form-control" placeholder="请输入手机号、公司名称、联系人">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    {% if current_user.group.power <= 0  %}
+                    
+                        {% if pagename == 'reg_customers' %}
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            筛选 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/manage/manage_customers?verify=1">待审核的用户</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/manage/manage_customers?verify=2">被拒绝的用户</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            筛选 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/manage/manage_customers?verify=0&status=0">未锁定用户</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/manage/manage_customers?verify=0&status=1">被锁定用户</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="header">
+                        {% if pagename == 'reg_customers' %}
+                        <h3>客户注册审核</h3>
+                        {% else %}
+                        <h3>客户管理</h3>
+                        {% endif %}
+                    </div>
+                    {% if search %}
+                        <div class="header">
+                            <h5>您搜索包含 “<span style="color:#ED5B56">{{search}}</span>” 的信息共有 <span style="color:#ED5B56">{{newcont}}</span> 条</h5>
+                        </div>
+                    {% endif %}
+                    <div class="content" name="checks">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><b>客户手机号</b></th>
+                                    <th style="width: 32%"><b>公司名称</b></th>
+                                    <th><b>联系人</b></th>
+                                    <th>
+                                        {% if pagename == 'reg_customers' %}
+                                        <b>注册时间</b>
+                                        {% else %}
+                                        <b>所属组</b>
+                                        {% endif %}
+                                    </th>
+                                    <th class="text-right"><b>操作</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if userlist %}
+                                    {% for user in userlist %}
+                                    <tr>
+                                        <td>{{user.phone}}</td>
+                                        <td>{{user.company}}</td>
+                                        <td><b>{{user.truename}}</b></td>
+                                        <td>
+                                            {% if pagename == 'reg_customers' %}
+                                            {{user.addtime}}
+                                            {% else %}
+                                            {{user.team.title}}
+                                            {% endif %}
+                                            
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-success btn-sm md-trigger" data-modal="md-scale{{loop.index}}">
+                                                <i class="fa fa-eye"></i>
+                                                查看
+                                            </button>
+                                            {% if current_user.group.power <= 0 and pagename == 'manage_customers'  %}
+                                                <a href="edit_customers?id={{user.id}}" class="btn btn-primary btn-sm">
+                                                    <i class="fa fa-check"></i>
+                                                    修改密码
+                                                </a>
+                                            {% endif %}
+                                            {% if current_user.group.power <= 0  %}
+                                                {% if pagename == 'reg_customers' %}
+                                                    {% if verify == 2 %}
+                                                    {% else %}
+                                                    <button type="button" name="examine_customers" class="btn btn-info btn-sm" data-id="{{user.id}}" data-phone="{{user.phone}}">
+                                                        <i class="fa fa-check"></i>
+                                                        通过审核
+                                                    </button> 
+                                                    <button type="button" class="btn btn-sm btn-danger" name="refuse_customers" data-id="{{user.id}}" data-phone="{{user.phone}}">
+                                                        <i class="fa fa-times"></i>
+                                                        拒绝
+                                                    </button>
+                                                    {% endif %}
+                                                {% else %}
+                                                <button type="button" class="btn btn-sm" name="lock_customers" data-id="{{user.id}}" data-status="{{user.lock}}">
+                                                    <i class="fa fa-lock"></i>
+                                                    锁定
+                                                </button>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <div class="md-modal md-effect-1" id="md-scale{{loop.index}}">
+                                        <div class="md-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close md-close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-left">
+                                                    <div class="row">
+                                                        <div class="col col-sm-2 text-right">联系人：</div>
+                                                        <div class="col col-sm-10">{{user.truename}}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col col-sm-2 text-right">公司：</div>
+                                                        <div class="col col-sm-10">{{user.company}}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col col-sm-2 text-right">电话：</div>
+                                                        <div class="col col-sm-10">{{user.phone}}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col col-sm-2 text-right">邮箱：</div>
+                                                        <div class="col col-sm-10">{{user.mail}}</div>
+                                                    </div>
+                                                    {% if pagename == 'manage_customers' %}
+                                                    <div class="row">
+                                                        <div class="col col-sm-2 text-right">所属组：</div>
+                                                        <div class="col col-sm-10">{{user.team.title}}</div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary btn-flat md-close" data-dismiss="modal">关闭</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="md-overlay"></div>
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan='6' class="text-center danger"><h3>没有数据</h3></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <ul class="pagination pagination-lg">
+                        {% if page %}
+                            <li><a href="manage_customers?pid={{pid}}&page={{previous}}&search={{search}}">«</a></li>
+                            {% for pages in page %}
+                                <li><a href="manage_customers?pid={{pid}}&page={{pages}}&search={{search}}">{{pages}}</a></li>
+                            {% endfor %}
+                            <li><a href="manage_customers?pid={{pid}}&page={{nextp}}&search={{search}}">»</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='admin/js/jquery.niftymodals/js/jquery.modalEffects.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='admin/js/base64.js') }}"></script>
+<script type="text/javascript">
+    // 判断锁定状态
+    $('[name="lock_customers"]').each(function(index, el) {
+        var ThisStatus = $(this).data('status');
+        if(ThisStatus == 0){
+            $(this).addClass('btn-warning');
+            $(this).html('<i class="fa fa-lock"></i> 锁定');
+        }else{
+            $(this).removeClass('btn-warning').addClass('btn-success');
+            $(this).html('<i class="fa fa-unlock-alt"></i> 解锁');
+        }
+    });
+    
+    
+    
+
+    // 锁定解锁用户
+    $('[name="lock_customers"]').click(function(event) {
+        var geturl = "/manage/lock_customers";
+        var status = $(this).data('status');
+        var id = $(this).data('id');
+        
+        if(status == 0){
+            var getdata = {
+                id: id,
+                status: 1
+            };
+            var active = '锁定';
+            LockLayer(active,geturl,getdata)
+        }else{
+            var getdata = {
+                id: id,
+                status: 0
+            };
+            var active = '解锁';
+            LockLayer(active,geturl,getdata)
+        };
+    });
+
+    {% if pagename == 'reg_customers' %}
+
+    // 通过审核
+    $('[name="examine_customers"]').on('click', function(event) {
+        var id = $(this).data('id');
+        teamid = [];
+        var teamlist = (
+            '<div style="padding:10px;"><label>选择工作组：</label><select class="form-control" id="team" name="team"><option value="">请选择</option>{% for team in teamlist %}<option value="{{team.id}}">{{team.title}}</option>{% endfor %}</select></div>'
+            );
+        
+        layer.open({
+            type: 1,
+            title: '分配到工作组',
+            skin: 'layui-layer-rim', //加上边框
+            area: ['320px', '210px'], //宽高
+            content: teamlist,
+            btn: ['确定','取消'], //按钮
+            btn1: function(index, layero){
+                var geturl = "/manage/examine_customers";
+                if (teamid[0] == null || teamid[0] == "") {
+                    layer.msg('请选择工作组');
+                }else {
+                    var getdata = {
+                        id: id,
+                        teamid:teamid[0]
+                    };
+                    // console.log(getdata);
+                    var active = '通过审核';
+                    layer.close()
+                    LockLayer(active,geturl,getdata)
+                }
+                
+            },
+            btn2: function(index, layero) {
+                layer.close()
+            }
+        });
+        
+        $('#team').change(function(event) {
+            var teamids = $(this).val();
+            teamid[0] = teamids;
+        });
+        
+        
+        
+    });
+
+    // 拒绝用户
+    $('[name="refuse_customers"]').click(function(event) {
+        var geturl = "/manage/examine_customers";
+        var phone = $(this).data('phone');
+        var id = $(this).data('id');
+        var getdata = {
+                id: id,
+                phone:phone,
+                examine:2
+            };
+        var active = '拒绝通过';
+        LockLayer(active,geturl,getdata)
+    });
+
+    {% endif %}
+
+    // 调用分页函数
+    pagination("{{page_cont}}");
+
+    $('.md-trigger').modalEffects();
+
+        
+</script>
+{% endblock %}

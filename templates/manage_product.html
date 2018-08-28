@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+    {% block css %}
+    <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/template.js')}}?v=2.1.1"></script>
+    {% endblock %}
+    {% block content %}
+        <div class="page-aside app tree">
+            <div class="fixed nano nscroller has-scrollbar">
+                <div class="content" tabindex="0" style="right: -17px;">
+                    <div class="header">
+                        <h2 class="page-title">分类列表</h2>
+                    </div>
+                    <ul class="nav nav-list treeview collapse">
+                        <div id="class_menu"></div>
+
+                    </ul>
+                </div>
+
+                <div class="pane" style="display: none;">
+                    <div class="slider" style="height: 718px; top: 0px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" id="pcont">
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12 block-flat">
+                <div class="">
+                    <div class="pull-right margin-left10">
+                        <form class="form-horizontal group-border-dashed" action="/manage/manage_product" method="get" name="manage_product" style="border-radius: 0px;">
+                            <div class="input-group">
+                                <input type="hidden" name="pid" value="{{pid}}">
+                                <input type="text" name="proname" class="form-control" placeholder="请输入关键字">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="pull-right">
+                        
+                        <a href="" name="add" type="button" class="btn btn-primary"><i class="fa fa-plus"></i> 添加商品</a>
+                        
+                    </div>
+                    {% if current_user.group.power <= 1  %}
+                    <div class="pull-right">
+                        <button type="submit" name="allselet" class="btn btn-primary btn-danger"><i class="fa fa-times"></i> 删除</button>
+                    </div>
+                    {% endif %}
+                    <div class="pull-right">
+                        <button type="submit" name="setnew" class="btn btn-primary btn-info"><i class="fa fa-bookmark"></i> 推荐</button>
+                    </div>
+                    <div class="header">
+                        {% if pid == 0 %}
+                        <h3>
+                            <span name="ClassName">所有产品</span>
+                        </h3>
+                        {% else %}
+                        <h3>
+                            <span name="ClassName"></span>
+                        </h3>
+                        {% endif %}
+                    </div>
+                    {% if proname %}
+                        <div class="header">
+                            <h5>您搜索包含 “<span style="color:#ED5B56">{{proname}}</span>” 的信息共有 <span style="color:#ED5B56">{{newcont}}</span> 条</h5>
+                        </div>
+                    {% endif %}
+                    <div class="content" name="checks">
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input id="check-all" type="checkbox" name="checkall" /></th>
+                                    <th><b>ID</b></th>
+                                    <th>产品图片</th>
+                                    <th style="width: 40%"><b>产品名称</b></th>
+                                    <th>所属分类</th>
+                                    <th><b>发布人</b></th>
+                                    {% if current_user.group.power == 0  %}
+                                    <th><b>产品组</b></th>
+                                    {% endif %}
+                                    <th class="text-right"><b>操作</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if productlist %}
+                                    {% for product in productlist %}
+                                    <tr>
+                                        <td><input type="checkbox" name="getid" id="{{product.proid}}" value="{{product.proid}}" /></td>
+                                        <td>{{product.proid}}</td>
+                                        <td>
+                                            {% if product.colors %}
+                                                {% for color in product.colors %}
+                                                {% if loop.first %} <!-- 获取列表第一条 -->
+                                                    {% for pic in color.colorpic|sort(attribute='sort') %}
+                                                        {% if loop.first %}
+                                                        <img src="" name="piclist" data-thsrc="{{pic.picurl}}">
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="view_product?id={{product.proid}}">
+                                                {{product.proname}}
+                                            </a> 
+                                            {% if product.recommend %}
+                                            <span style="color:#e26060"><i class="fa fa-thumbs-o-up"></i>{{product.recommend.titles}}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{product.product_class.classname}}</td>
+                                        <td>{{product.post_user.username}}</td>
+                                        {% if current_user.group.power == 0  %}
+                                        <td>
+                                                {{product.hasteam.title}}
+                                        </td>
+                                        {% endif %}
+                                        <td class="text-right">
+                                            <a class="btn btn-info btn-sm" href="edit_product?pid={{pid}}&id={{product.proid}}">
+                                                <i class="fa fa-pencil"></i>
+                                                修改
+                                            </a> 
+                                            {% if current_user.group.power <= 1  %}
+                                            <button type="button" class="btn btn-danger btn-sm" name="del_product" data-id="{{product.proid}}">
+                                                <i class="fa fa-times"></i>
+                                                删除
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan='7' name="nodata" class="text-center danger"><h3>没有数据</h3></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <ul class="pagination pagination-lg">
+                        {% if page %}
+                            <li><a href="manage_product?pid={{pid}}&page={{previous}}&title={{title}}">«</a></li>
+                            {% for pages in page %}
+                                <li><a href="manage_product?pid={{pid}}&page={{pages}}&title={{title}}">{{pages}}</a></li>
+                            {% endfor %}
+                            <li><a href="manage_product?pid={{pid}}&page={{nextp}}&title={{title}}">»</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+{% if classifylist %}
+    {%raw%}
+    <script type="text/html" id="ClassMenu">
+        {{each menus}}
+        <li name="bigclass" data-id="{{$value.classid}}" class="open">
+            <label class="tree-toggler nav-header"> <i class="fa fa-folder-open-o"></i>
+                {{$value.classname}}
+            </label>
+            <ul class="nav nav-list tree">
+                {{each $value.children}}
+                <li>
+                    <a href="manage_product?pid={{$value.classid}}" name="names" data-id="{{$value.classid}}">{{$value.classname}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </li>
+        {{/each}}
+    </script>
+    {%endraw%}
+{% else %}
+    {%raw%}
+    <script type="text/html" id="ClassMenu">
+        <h3>没有数据</h3>
+    </script>
+    {%endraw%}
+{% endif %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    // 获取分类数据并使用template渲染
+    var classlist = {{classifylist|safe}};
+    // console.log(classlist);
+    var data = {
+        menus : classlist
+    }
+    var html = template('ClassMenu', data);
+    document.getElementById('class_menu').innerHTML = html;
+
+    var pid = getUrlParam("pid");
+    $('[name="names"]').each(function(index, el) {
+        if (pid == $(this).data('id')){
+            var thisname = $(this).parents('ul').siblings('label').text() + '>' + $(this).text();
+            $('[name="ClassName"]').text(thisname.replace(/\s+/g,""));
+        }
+        
+    });
+    $('[name="bigclass"]').each(function(index, el) {
+        var tow = $(this).children('ul').children('li');
+        var thispid = $(this).data('id');
+        var thisname = $(this).text();
+        if(tow.length==0){
+            $(this).click(function(event) {
+                window.location.href="manage_product?pid="+thispid
+            });
+        };
+        if (pid == $(this).data('id')){
+            $('[name="ClassName"]').text($(this).text().replace(/\s+/g,""));
+        };
+    });
+
+    // 单个删除
+    $('button[name="del_product"]').click(function(event) {
+        var geturl = "/manage/del_product";
+        var getdata = {
+            id: $(this).data('id')
+        };
+        var post = false;
+        var active = '删除';
+        LockLayer(active,geturl,getdata)
+    });
+    
+
+    // 全部删除
+    $('button[name="allselet"]').click(function(event) {
+        var geturl = "/manage/del_product";
+        var post = true;
+        var getdata = {
+            id: ListId
+        };
+        var active = '删除';
+        LockLayer(active,geturl,getdata,post)
+    });
+
+    // 设置推荐
+    $('button[name="setnew"]').click(function(event) {
+        var teamlist = (
+            '<div style="padding:10px;"><label>选择推荐：</label><select class="form-control" id="new_p" name="new_p"><option value="0">不推荐</option><option value="1">女装</option><option value="2">编辑推荐</option></select></div>'
+            );
+        if(ListId.length == 0){
+            layer.alert('请先选择产品');
+        }else{
+            layer.open({
+                type: 1,
+                title: '设置推荐',
+                skin: 'layui-layer-rim', //加上边框
+                area: ['320px', '210px'], //宽高
+                content: teamlist,
+                btn: ['确定','取消'], //按钮
+                btn1: function(index, layero){
+                    var geturl = "/manage/up_pro_state";
+                    var new_p = $('#new_p').val();
+                    var post = true;
+                    var getdata = {
+                        id: ListId,
+                        new_p:new_p
+                    };
+                    console.log(getdata);
+                    var active = '设置推荐';
+                    LockLayer(active,geturl,getdata,post);
+                    layer.close();
+                },
+                btn2: function(index, layero) {
+                    layer.close()
+                }
+            });
+        }
+        
+    });
+
+    // 调用分页函数
+    pagination("{{page_cont}}");
+
+    // 左侧菜单
+    $('label.tree-toggler').click(function () {
+        var icon = $(this).children(".fa");
+        if(icon.hasClass("fa-folder-o")){
+            icon.removeClass("fa-folder-o").addClass("fa-folder-open-o");
+        }else{
+            icon.removeClass("fa-folder-open-o").addClass("fa-folder-o");
+        };
+          
+        $(this).parent().children('ul.tree').toggle(300,function(){
+            $(this).parent().toggleClass("open");
+            $(".tree .nscroller").nanoScroller({ preventPageScrolling: true });
+        }); 
+    });
+
+    // 获得分类名字传入
+    var cname = encodeURI(encodeURI($('[name="ClassName"]').text()));
+    var csurl = 'add_product?pid={{pid}}&cname='+cname
+    $('[name="add"]').attr({href: csurl});
+    
+    // 图片第一张
+    $('[name="piclist"]').each(function(index, el) {
+        var src = $(this).data('thsrc');
+        var thisrc = '';
+        var thisrcs = new Array(); //定义一数组 
+        thisrcs = src.split(','); //字符分割 
+        for (i = 0;i < thisrcs.length ;i++ ) {
+            $(this).attr('src',thisrcs[3]);
+        };
+    });
+
+});
+        
+</script>
+{% endblock %}

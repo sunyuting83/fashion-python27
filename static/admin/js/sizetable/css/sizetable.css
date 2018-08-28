@@ -1,0 +1,146 @@
+div.size-table {
+	border:1px solid #ddd;
+	border-bottom:none;
+	width: auto;
+	display: table;
+	background:#fff;
+}
+div.size-table ul,li {list-style: none}
+div.size-table ul {
+	display: block;
+	margin:0 auto;
+	padding:0;
+	border-bottom:1px solid #ddd;
+	position: relative;
+}
+div.size-table li {
+	display: table-cell;
+	width: 99px;
+	margin:0 auto;
+	padding:0;
+	height: auto;
+	border-right:1px solid #ddd;
+	position: relative;
+}
+div.size-table li:last-child {
+	width: 80px;
+	border-right:none;
+}
+div.size-table li input[type="text"] {
+	width: 93px;
+	height: 31px;
+	line-height: 31px;
+	border:1px solid transparent;
+	background:transparent;
+	outline:none;
+	padding-left: 5px;
+	text-align: center;
+}
+
+/*首行首列深灰色样式*/
+div.size-table.shsl-dark li:first-child {background: #333}
+div.size-table.shsl-dark ul:first-child {background: #333}
+div.size-table.shsl-dark li:first-child input[type="text"] {color:#fff;}
+div.size-table.shsl-dark ul:first-child input[type="text"] {color:#fff}
+/*首行首列浅灰灰色样式*/
+div.size-table.shsl-ddd li:first-child {background: #eee}
+div.size-table.shsl-ddd ul:first-child {background: #eee}
+/*首行深灰色样式*/
+div.size-table.sh-dark ul:first-child {background: #333}
+div.size-table.sh-dark ul:first-child input[type="text"] {color:#fff;}
+div.size-table.sh-dark {border-color:#000;}
+div.size-table.sh-dark ul {border-bottom-color:#000;}
+div.size-table.sh-dark li {border-right-color:#000;}
+/*首行浅灰色样式*/
+div.size-table.sh-ddd ul:first-child {background: #eee}
+/*色块背景首行黑色*/
+div.size-table.bgcolor-dark {border:2px solid transparent;}
+div.size-table.bgcolor-dark ul {border-bottom:2px solid transparent}
+div.size-table.bgcolor-dark li {border-right:2px solid #fff;background:#ddd}
+div.size-table.bgcolor-dark ul:first-child li {background: #333}
+div.size-table.bgcolor-dark ul:first-child input[type="text"] {color:#fff}
+/*色块背景首行黑色首列灰色*/
+div.size-table.bgcolor-dark-sl {border:2px solid transparent;}
+div.size-table.bgcolor-dark-sl ul {border-bottom:2px solid transparent}
+div.size-table.bgcolor-dark-sl li {border-right:2px solid #fff;background:#ddd}
+div.size-table.bgcolor-dark-sl ul:first-child li {background: #333}
+div.size-table.bgcolor-dark-sl ul:first-child input[type="text"] {color:#fff}
+div.size-table.bgcolor-dark-sl li:first-child {background: #666}
+div.size-table.bgcolor-dark-sl li:first-child input[type="text"] {color:#fff;}
+/*首行黑色背景线条*/
+div.size-table.sh-dark-bg {border:1px solid transparent;}
+div.size-table.sh-dark-bg ul {border-bottom:1px solid #666}
+div.size-table.sh-dark-bg li {border-right:1px solid transparent;}
+div.size-table.sh-dark-bg ul:first-child li {background: #333}
+div.size-table.sh-dark-bg ul:first-child input[type="text"] {color:#fff}
+/*首行灰色背景线条*/
+div.size-table.sh-ddd-bg {border:1px solid transparent;}
+div.size-table.sh-ddd-bg ul {border-bottom:1px solid #666}
+div.size-table.sh-ddd-bg li {border-right:1px solid transparent;}
+div.size-table.sh-ddd-bg ul:first-child li {background: #666}
+div.size-table.sh-ddd-bg ul:first-child input[type="text"] {color:#fff}
+
+div.operation>div {
+	display: inline-block;
+	cursor: pointer;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	margin-right: 8px;
+	font-size: 14px;
+}
+div.operation {
+	margin:10px auto;
+}
+
+div.operation>div i {
+	width: 32px;
+	height: 32px;
+	display: block;
+	margin:5px auto;
+}
+
+div.operation>div#styles.cuur {color:#f20;}
+
+div.operation>div#styls-more {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top:200%;
+	bottom: 0;
+	border-top:3px solid #3a3a3a;
+	background:rgba(0,0,0,.1);
+	transition: top .2s linear;
+	z-index: 99;
+	cursor: default;
+}
+div.operation>div#styls-more.active {top:80%;}
+div.operation>div#styls-more span {
+	display: inline-block;
+	margin-right: 8px;
+	cursor: pointer;
+}
+div.operation>div#styls-more em.close {
+	position: absolute;
+	right: 0;
+	top:0;
+}
+
+.icon {
+	background:url(../images/icons.png) no-repeat center;
+	background-size:256px 64px; 
+}
+.icon-row-plus {background-position:  -32px -32px}
+.icon-col-plus {background-position:  0 -32px}
+.icon-row-minus {background-position:  -32px 0}
+.icon-col-minus {background-position:  0 0}
+.icon-style {background-position:  -64px 0}
+.icon-style1 {background-position:  -64px -32px}
+.icon-style2 {background-position:  -96px 0}
+.icon-style3 {background-position:  -96px -32px}
+.icon-style4 {background-position:  -128px 0}
+.icon-style5 {background-position:  -128px -32px}
+.icon-style6 {background-position:  -160px 0}
+.icon-style7 {background-position:  -160px -32px}
+.icon-style8 {background-position:  -192px 0}
+.icon-img-down {background-position:  -192px -32px}
+.icon-style-close {background-position:  -224px -32px}

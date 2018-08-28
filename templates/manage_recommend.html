@@ -1,0 +1,319 @@
+{% if current_user.group.power <= 1  %}
+{% extends "base.html" %}
+    {% block css %}
+    <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/template.js')}}?v=2.1.1"></script>
+    <style type="text/css">
+        table.classtable > tbody > tr > td {border:none;}
+        table.classtable tr:nth-child(2n) {background:#fff;}
+        table.classtable {
+            border-top:1px solid #ddd;
+            border-bottom:1px solid #ddd;
+        }
+        table.classtable > thead > th {border:none;}
+        table.classtable .px, table.classtable .pxi {display: inline-block;}
+        table.classtable .pxi {
+            width: 35px;
+            margin-left: 8px;
+            text-align: center;
+            padding: 6px 8px;
+            border-radius: 1px;
+            -webkit-border-radius: 1px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+            height: 26px;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        table.classtable thead th {
+            border-left: none;
+            vertical-align: middle;
+            background:#f8f8f8;
+        }
+
+        table.classtable .no-border-y td {border-bottom: 1px solid #eee}
+    </style>
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>推荐类型管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">推荐类型管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    {% if current_user.group.power == 0  %}
+                    <div name="addtop" style="background: #fff;">
+                    {#<div class="pull-right margin-left10">
+                        <a href="/manage/add_recommend?topid=0" name="addclass"  type="button" class="btn btn-success"><i class="fa fa-plus"></i> 添加一级类型</a>
+                    </div>#}
+                    <div class="pull-right margin-left10">
+                        <button type="button" name="allselet" class="btn btn-info"><i class="fa fa-sort"></i> 更新排序</button>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" name="toggle" class="btn btn-primary"><i class="fa fa-folder-open"></i> 收起二级类型</button>
+                    </div>
+                    </div>
+                    
+                    {% endif %}
+                    <div class="header">
+                        <h3>类型管理</h3>
+                    </div>
+                    <div class="content">
+                        <div id="class_menu"></div>
+                    </div>
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+{% if recommendlist %}
+    {%raw%}
+    <script type="text/html" id="ClassMenu">
+    {{each menus}}
+        <table class="table no-border classtable">
+            <thead class="no-border-y">
+                <tr>
+                    <th style="width:3%"><span class="fa fa-plus"></span></th>
+                    <th colspan='2' style="width:30%"><h5 class="color-primary">{{$value.titles}}</h5></th>
+                    <th style="width:18%"><label class="px">排序:</label><input type="text" maxlength="2" value="{{$value.sort}}" data-id="{{$value.id}}" class="pxi" /></th>
+                    <th class="text-right" style="width:30%">
+                        <button class="btn btn-success btn-sm" onclick="add_small({{$value.id}},this)">
+                            <i class="fa fa-plus"></i>
+                            添加下级类型
+                        </button> 
+                        <a class="btn btn-info btn-sm" href="/manage/edit_recommend?id={{$value.id}}">
+                            <i class="fa fa-pencil"></i>
+                            修改
+                        </a> 
+                        <button class="btn btn-danger btn-sm" name="del_class" data-id="{{$value.id}}" data-topid={{$value.topid}}>
+                            <i class="fa fa-times"></i>
+                            删除
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="no-border-y">
+                {{each $value.children}}
+                <tr>
+                    <td></td>
+                    <td style="width: 3%"><span class="fa fa-minus"></span></td>
+                    <td>
+                        
+                        {{$value.titles}}
+                        
+                    </td>
+                    <td><label class="px">排序:</label><input type="text" maxlength="2" value="{{$value.sort}}" data-id="{{$value.id}}" class="pxi" /></td>
+                    <td class="text-right">
+                        <a class="btn btn-info btn-sm" href="/manage/edit_recommend?id={{$value.id}}">
+                            <i class="fa fa-pencil"></i>
+                            修改
+                        </a> 
+                        <button class="btn btn-danger btn-sm" name="del_class" data-id="{{$value.id}}" data-topid={{$value.topid}}>
+                            <i class="fa fa-times"></i>
+                            删除
+                        </button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{/each}}
+    </script>
+    {%endraw%}
+{% else %}
+    {%raw%}
+    <script type="text/html" id="ClassMenu">
+        <h3>没有数据</h3>
+    </script>
+    {%endraw%}
+{% endif %}
+<script type="text/javascript">
+// 添加下级类型函数
+function add_small(id,obj){
+    // console.log(id);
+    var getdata = {'id': id};
+    $.ajax({ 
+        type: 'get', 
+        url: '/manage/hasProduct',
+        data: getdata,
+        dataType: 'json',
+        beforeSend:function(XMLHttpRequest){ 
+        }, 
+        success:function(data,textStatus){ 
+            if(data.state == 'haspro'){
+                layer.alert('类型下有产品，无法添加类型');
+            } else {
+                var nv = $(obj).parents('table').children('tbody').children('tr').length + 1;
+                location.href="/manage/add_recommend?id="+id + '&lastbn=' + nv
+            }
+        }
+    });
+}
+$(document).ready(function(){
+    // 获取类型数据并使用template渲染
+    var classlist = {{recommendlist|safe}};
+    // console.log(classlist);
+    var data = {
+        menus : classlist
+    }
+    var html = template('ClassMenu', data);
+    document.getElementById('class_menu').innerHTML = html;
+
+    // 删除开始
+    $('[name="del_class"]').click(function(event) {
+        var topid = $(this).data('topid');
+        var id = $(this).data('id');
+        var getdata = {'topid': topid, 'id': id};
+        if(topid != 0){
+            layer.confirm('您确定要删除此类型？', {
+                btn: ['确定删除','取消'] //按钮
+            }, function(){
+                console.log(getdata);
+                $.ajax({ 
+                    type: 'get', 
+                    url: '/manage/del_classify',
+                    data: getdata,
+                    dataType: 'json',
+                    beforeSend:function(XMLHttpRequest){ 
+                        
+                    }, 
+                    success:function(data,textStatus){
+                        if(data.state == 'ok'){
+                            layer.msg('删除类型成功', {icon: 1});
+                            return window.location.reload()
+                        }else if(data.state == 'havedate'){
+                            layer.alert('此类型有产品,请先更改产品类型？');
+                        }
+                    }
+                });
+                layer.confirm('您确要删除？', {
+                    btn: ['确定除','取消'] //按钮
+                });
+            });
+        }else{
+            var hasTbody = $(this).parents('thead').siblings('tbody').children('tr');
+            console.log(hasTbody.length);
+            if(hasTbody.length>0){
+                layer.confirm('请先删除下级类型', {
+                    btn: ['点击返回'] //按钮
+                })
+            }else{
+                $.ajax({ 
+                    type: 'get', 
+                    url: '/manage/del_classify',
+                    data: getdata,
+                    dataType: 'json',
+                    beforeSend:function(XMLHttpRequest){ 
+
+                    }, 
+                    success:function(data,textStatus){ 
+                        if(data.state == 'ok'){
+                            layer.msg('删除类型成功', {icon: 1});
+                            return window.location.reload()
+                        } else {
+                            layer.alert('此类型有产品,请先更改产品类型？');
+                        }
+                    }
+                });
+            }
+        };
+    });
+
+
+
+    
+    
+    // 超过一定高度添加顶级类型按钮漂浮
+    $(window).scroll(function(){
+        if ($(window).scrollTop()>125){
+            $('[name="addtop"]').css({
+                position:'fixed',
+                top:'55px',
+                left:'220px',
+                'z-index':9999999,
+                'padding':'15px',
+                'box-shadow': '1px 1px 10px #e2e2e2'
+            });
+        }
+        else  
+        {
+            $('[name="addtop"]').css({
+                position:'static',
+                padding:0
+            });
+        }
+    });
+
+    // 更新排序
+    $('button[name="allselet"]').click(function(event) {
+        var sorts = [];
+        var ids = [];
+
+        // 获取id和排序的值
+        $('.pxi').each(function(index, el) {
+            var sort = $(this).val();
+            var id = $(this).data('id');
+
+            sorts.push(sort);
+            ids.push(id);
+        });
+
+
+        var geturl = "/manage/update_sort";
+        var post = true;
+        var getdata = {
+            id: ids,
+            sort: sorts
+        };
+        console.log(getdata);
+        var active = '更新排序';
+        LockLayer(active,geturl,getdata,post)
+    });
+
+    // 排序可以输入数字
+    $(".pxi").onlyNum();
+
+    // 顶级类型自动排序
+    var lastNB = $('.classtable').children('thead').length + 1;
+    var addclass = $('[name="addclass"]');
+    var nburl = addclass.attr('href');
+    newurl = nburl + '&lastbn=' + lastNB;
+    addclass.attr('href',newurl);
+
+    // 收起、展开二级类型
+    $('[name="toggle"]').on('click', function(event) {
+        var text = $(this).html();
+        // console.log(text);
+        var zk = "展开";
+        $('.classtable').children('tbody').toggle(200);
+        if(isContains(text, zk) == true){
+            $(this).html('<i class="fa fa-folder-open"></i> 收起二级类型');
+        }else{
+            $(this).html('<i class="fa fa-folder"></i> 展开二级类型');
+        }
+    });
+    
+});
+
+</script>
+
+
+{% endblock %}
+{% endif %}

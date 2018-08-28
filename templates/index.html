@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+    {% block content %}
+        <div class="container-fluid" id="pcont">
+            <div class="cl-mcont">
+                <div class="stats_bar">
+                    {% if current_user.group.power <= 2  %}
+                    <a href="{{url_for('manage.manage_order', order_type = 0, state = 0, page = 1)}}" class="butpro butstyle">
+                        <div class="sub">
+                            <h2>订单管理</h2>
+                            <span><i class="fa fa-calendar-o"></i></span>
+                        </div>
+                    </a>
+                    {% endif %}
+                    <a href="add_product?pid=0" class="butpro butstyle">
+                        <div class="sub">
+                            <h2>添加产品</h2>
+                            <span><i class="fa fa-barcode"></i></span>
+                        </div>
+                    </a>
+                    {% if current_user.group.power <= 0  %}
+                    <a href="{{url_for('manage.manage_customers')}}" class="butpro butstyle">
+                        <div class="sub">
+                            <h2>客户注册审核</h2>
+                            <span><i class="fa fa-users"></i></span>
+                        </div>
+                    </a>
+                    {% endif %}
+                    <a href="add_news?pid=1" class="butpro butstyle">
+                        <div class="sub">
+                            <h2>添加资讯</h2>
+                            <span><i class="fa fa-rss-square"></i></span>
+                        </div>
+                    </a>
+                    {% if current_user.group.power <= 2  %}
+                    <a  href="{{url_for('manage.manage_guestbook', status = 0, page = 1)}}" class="butpro butstyle">
+                        <div class="sub">
+                            <h2>留言管理</h2>
+                            <span><i class="fa fa-comments"></i></span>
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+    
+
+        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul name="messages" style="display: none">
+            {% for message in messages %}
+            <li data-message="{{ message }}"></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+    {% endblock %}
+
+    {% block js %}
+    <script type="text/javascript" src="{{url_for('static',filename='admin/js/echarts.common.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            var massage = $('[name="messages"]').children('li').data('message');
+            if(massage){
+                $.gritter.add({
+                    title: '登录成功',
+                    text: massage,
+                    class_name: 'success'
+                });
+            }else if(massage == null){
+
+            }
+        });
+    </script>
+    {% endblock %}

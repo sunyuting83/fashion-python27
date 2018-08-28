@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{url_for('static',filename='admin/images/favicon.png')}}">
+    <title>后台管理系统</title>
+    <style type="text/css">
+        .header h3 {
+            display: inline-block;
+            font-size: 16px;
+            color:#333;
+        }
+        .header h5 {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: inherit;
+            color:#666;
+        }
+        .block-flat {
+            width: 100%;
+            position: relative;
+        }
+        .pull-right {
+            position: absolute;
+            right: 10px;
+            margin-top: 15px
+        }
+
+        .content dl {
+            display: inline-block;
+            width: 17%;
+            margin:15px 1.1% auto 1.1%;
+            text-align: center;
+            border:1px solid #ddd;
+            cursor: pointer;
+        }
+        .content dl dd {
+            margin-left: 0px;
+        }
+        .content dl h5, .content dl dt {
+            margin:0px auto;
+            font-size: 12px;
+        }
+
+        .pagination {
+          display: inline-block;
+          padding-left: 0;
+          margin: 20px 0;
+          border-radius: 4px;
+        }
+        .pagination > li {
+          display: inline;
+        }
+        .pagination > li > a,
+        .pagination > li > span {
+          position: relative;
+          float: left;
+          padding: 6px 12px;
+          margin-left: -1px;
+          line-height: 1.428571429;
+          color: #428bca;
+          text-decoration: none;
+          background-color: #fff;
+          border: 1px solid #ddd;
+        }
+        .pagination > li:first-child > a,
+        .pagination > li:first-child > span {
+          margin-left: 0;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+        .pagination > li:last-child > a,
+        .pagination > li:last-child > span {
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+        }
+        .pagination > li > a:hover,
+        .pagination > li > span:hover,
+        .pagination > li > a:focus,
+        .pagination > li > span:focus {
+          color: #2a6496;
+          background-color: #eee;
+          border-color: #ddd;
+        }
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+          z-index: 2;
+          color: #fff;
+          cursor: default;
+          background-color: #428bca;
+          border-color: #428bca;
+        }
+        .pagination > .disabled > span,
+        .pagination > .disabled > span:hover,
+        .pagination > .disabled > span:focus,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+          color: #999;
+          cursor: not-allowed;
+          background-color: #fff;
+          border-color: #ddd;
+        }
+        .pagination-lg > li > a,
+        .pagination-lg > li > span {
+          padding: 10px 16px;
+          font-size: 18px;
+        }
+        .pagination-lg > li:first-child > a,
+        .pagination-lg > li:first-child > span {
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+        }
+        .pagination-lg > li:last-child > a,
+        .pagination-lg > li:last-child > span {
+          border-top-right-radius: 6px;
+          border-bottom-right-radius: 6px;
+        }
+        .pagination-sm > li > a,
+        .pagination-sm > li > span {
+          padding: 5px 10px;
+          font-size: 12px;
+        }
+        .pagination-sm > li:first-child > a,
+        .pagination-sm > li:first-child > span {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+        }
+        .pagination-sm > li:last-child > a,
+        .pagination-sm > li:last-child > span {
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+        .pager {
+          padding-left: 0;
+          margin: 20px 0;
+          text-align: center;
+          list-style: none;
+        }
+        .pager li {
+          display: inline;
+        }
+        .pager li > a,
+        .pager li > span {
+          display: inline-block;
+          padding: 5px 14px;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 15px;
+        }
+        .pager li > a:hover,
+        .pager li > a:focus {
+          text-decoration: none;
+          background-color: #eee;
+        }
+        .pager .next > a,
+        .pager .next > span {
+          float: right;
+        }
+        .pager .previous > a,
+        .pager .previous > span {
+          float: left;
+        }
+        .pager .disabled > a,
+        .pager .disabled > a:hover,
+        .pager .disabled > a:focus,
+        .pager .disabled > span {
+          color: #999;
+          cursor: not-allowed;
+          background-color: #fff;
+        }
+
+    </style>
+</head>
+    {% block content %}
+
+
+
+<body>
+    <div class="block-flat">
+        
+        <div class="pull-right">
+            <form class="form-horizontal group-border-dashed" action="/manage/chose_pro" method="get" name="chose_pro" style="border-radius: 0px;">
+                <div class="input-group">
+                    <input type="text" name="proname" class="form-control" placeholder="请输入关键字">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="header">
+            <h3>
+                选择商品
+            </h3>
+            {% if proname %}
+                <h5>您搜索包含 “<span style="color:#ED5B56">{{proname}}</span>” 的信息共有 <span style="color:#ED5B56">{{newcont}}</span> 条</h5>
+            {% endif %}
+        </div>  
+        
+        <div class="content">
+            {% if productlist %}
+                {% for product in productlist %}
+                
+                    <dl data-id="{{product.proid}}">
+                        <dd>
+                            {% if product.colors %}
+                                {% for color in product.colors %}
+                                {% if loop.first %} <!-- 获取列表第一条 -->
+                                    {% for pic in color.colorpic|sort(attribute='sort') %}
+                                        {% if loop.first %}
+                                        <img src="" name="piclist" data-thsrc="{{pic.picurl}}">
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </dd>
+                        <dt>{{product.proname}}</dt>
+                        <h5>{{product.product_class.classname}}</h5>
+                    </dl>
+                {% endfor %}
+            {% else %}
+            <div class="row">
+                <h3>没有数据</h3>
+            </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <ul class="pagination pagination-lg">
+            {% if page %}
+                <li><a href="chose_pro?page={{previous}}&title={{title}}">«</a></li>
+                {% for pages in page %}
+                    <li><a href="chose_pro?page={{pages}}&title={{title}}">{{pages}}</a></li>
+                {% endfor %}
+                <li><a href="chose_pro?page={{nextp}}&title={{title}}">»</a></li>
+            {% endif %}
+            </ul>
+        </div>
+            
+    </div>
+            
+
+
+{% endblock %}
+
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.js')}}"></script>
+
+<script src="{{url_for('static',filename='admin/js/layer/layer.js')}}"></script>
+{% block js %}
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    // 调用分页函数
+    pagination("{{page_cont}}");
+
+    // 分页函数
+    function pagination(page_cont) {
+        if ( $(".pagination").length > 0 ) { 
+            var page = getUrlParam('page');
+            var thispage = $('.pagination').children('li');
+            if(page == 1 || page == null) {
+                thispage.first().addClass('disabled');
+                thispage.first().children('a').attr({href: '#'});
+                thispage.eq(page).addClass('active');
+                if(page == null){
+                    thispage.eq(page).removeClass('active');
+                    thispage.eq(1).addClass('active');
+                }
+            }else if(page == page_cont) {
+                thispage.last().addClass('disabled');
+                thispage.eq(page).addClass('active');
+                thispage.last().children('a').attr({href: '#'});
+            }
+            else{
+                thispage.eq(page).addClass('active')
+            }
+        };
+    }
+
+    //获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    };
+
+    // 图片第一张
+    $('[name="piclist"]').each(function(index, el) {
+        var src = $(this).data('thsrc');
+        var thisrc = '';
+        var thisrcs = new Array(); //定义一数组 
+        thisrcs = src.split(','); //字符分割 
+        for (i = 0;i < thisrcs.length ;i++ ) {
+            $(this).attr('src',thisrcs[3]);
+        };
+    });
+
+    // 点击事件
+    $('dl').each(function(index, el) {
+        $(this).click(function(event) {
+            var index = parent.layer.getFrameIndex(window.name);
+            var proid = $(this).data('id');
+            var proname = $(this).find('dt').text();
+            var _url = parent.$('#url');
+            var _pronames = parent.$('[name="pronames"]')
+            _url.val(proid);
+            _pronames.text(proname).show();
+            parent.layer.close(index);
+        });
+    });
+
+});
+        
+</script>
+{% endblock %}
+
+</body>
+</html>

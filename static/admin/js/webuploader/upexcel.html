@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+
+	    <title>Excel上传</title>
+		
+    	<link rel="stylesheet" type="text/css" href="../bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./webuploader.css">
+        <style type="text/css">
+			.bs-example button {
+				margin-left: 20px;
+				margin-top: 20px;
+			}
+        </style>
+	</head>
+	<body>
+        <div style="padding:15px;">
+            <div id="picker">请选择发货清单</div>
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-info" role="progressbar" style="width:0%;"></div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-success btn-rad" name="itok" style="display: none">更新订单状态</button>
+                <input id="thispath" type="hidden" value="" />
+                <input id="orderid" type="hidden" />
+                <input id="state" type="hidden" />
+                <input id="email" type="hidden" />
+            </div>
+        </div>
+	</body>
+
+
+    <script src="../jquery.js"></script>
+    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/webuploader15/webuploader-0.1.5/webuploader.js')}}?v=1.0"></script> -->
+    <script src="./webuploader.min.js"></script>
+    <script type="text/javascript">
+        function getStrLength(str) {
+            var cArr = str.match(/[^\x00-\xff]/ig);
+            return str.length + (cArr == null ? 0 : cArr.length);
+        }
+        // 图片上传控件
+            $('.progress').hide();
+            var index = parent.layer.getFrameIndex(window.name);
+            var task_id = parent.$("#id").val();
+            var uploader = WebUploader.create({
+                swf: './static/webuploader/Uploader.swf',
+                server: '/manage/upexcel',
+                pick: '#picker',
+                multiple: false,
+                accept: {
+                        title: 'Excel',
+                        extensions: 'xls,xlsx',
+                        mimeTypes: 'application/xls,application/xlsx'
+                    },
+                auto: true,
+                threads: 3,
+                duplicate: true,
+                formData: {
+                    task_id: task_id,
+                },
+            });
+            uploader.on('startUpload', function() {
+                $('#progress').show();
+                $('.progress-bar').css('width', '0%');
+                $('.progress-bar').text('0%');
+                $('.progress-bar').removeClass('progress-bar-danger progress-bar-success');
+                $('.progress-bar').addClass('active progress-bar-striped');
+                $('.progress').show();
+
+            });
+            uploader.on('uploadProgress', function(file, percentage) {
+                $('.progress-bar').css('width', percentage * 100 - 1 + '%');
+                $('.progress-bar').text(Math.floor(percentage * 100 - 1) + '%');
+            });
+            uploader.on('uploadSuccess', function(file,response) {
+                $('.progress-bar').css('width', '100%');
+                $('.progress-bar').text('100%');
+                $('.progress-bar').addClass('progress-bar-success');
+                $('.progress-bar').text('上传完成');
+                // console.log(response.image_path);
+                $('[ name="itok"]').show();
+                var thispate = 'static' + response.fullName;
+                $('#thispath').val(thispate);
+
+            });
+            uploader.on('uploadError', function(file) {
+                $('.progress-bar').css('width', '100%');
+                $('.progress-bar').text('100%');
+                $('.progress-bar').addClass('progress-bar-danger');
+                $('.progress-bar').text('上传失败');
+            });
+            uploader.on('uploadComplete', function(file) {
+                $('.progress-bar').removeClass('active progress-bar-striped');
+            });
+
+            $('[name="itok"]').on('click', function(event) {
+                var orderid = $('#orderid').val();
+                var state = $('#state').val();
+                var thsiexcel = $('#thispath').val();
+                var usermail = $('#email').val();
+                var active = '更新订单状态';
+                var geturl = "/manage/up_order";
+                var post = true;
+                getdata = {
+                    "orderid": orderid,
+                    "state": state,
+                    "thisexcel": thsiexcel,
+                    "usermail": usermail
+                };
+                parent.UpLayer(active,geturl,getdata,post);
+            });
+    </script>
+</html>

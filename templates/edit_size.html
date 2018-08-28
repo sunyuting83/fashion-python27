@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+    {% block css %}
+        <style type="sizeis/css">
+            #iconTemplate > .input-group { 
+                display: inline-block;
+                margin-right: 10px
+            }
+            #iconTemplate > .input-group > img {
+                width: 35px;
+                cursor: pointer;
+            }
+            #iconTemplate > .input-group.active > em {
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                z-index: 99;
+                background: #e44c34;
+                border-radius: 50%;
+            }
+        </style>
+    {% endblock %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>尺码管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">修改尺码</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/manage_size" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>修改尺码</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_size" method="post" name="edit_size" style="border-radius: 0px;">
+        {% else %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>尺码管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">添加尺码</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/manage_size" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>添加尺码</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/add_size" method="post" name="add_size" style="border-radius: 0px;">
+        {% endif %}
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">尺码标题</label>
+                                <div class="col-sm-6">
+                                    {{ form.sizename }}
+                                    {% for error in form.errors.sizename %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">尺码内容</label>
+                                <div class="col-sm-6">
+                                    {{ form.sizeis }}
+                                    {% for error in form.errors.sizeis %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group" style="color:#d20404">
+                                <label class="col-sm-3 control-label">提示</label>
+                                <div class="col-sm-6">
+                                    尺码请使用 , 分割。 英文半角英文逗号，最后一组不需要逗号。例：S,M,L,XL,XXl,XXXl
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    
+    
+
+    {% endblock %}
+    {% block js %}
+    <script type="sizeis/javascript">
+        $(document).ready(function() {
+            var massage = $('[name="messages"]').children('li').data('message');
+            if(massage){
+                $.gritter.add({
+                    title: '修改成功',
+                    sizeis: massage,
+                    class_name: 'success'
+                });
+                $(function () {
+                    setTimeout(ChangeTime, 1000);
+                });
+                
+            }else if(massage == null){
+
+            }
+            function ChangeTime() {
+                var time;
+                time = $("#time").sizeis();
+                time = parseInt(time);
+                time--;
+                if (time <= 0) {
+                    window.location.href = "/manage/manage_size";
+                } else { 
+                    $("#time").sizeis(time); 
+                    setTimeout(ChangeTime, 1000); 
+                } 
+            };
+        });
+        
+    </script>
+    {% endblock %}
+

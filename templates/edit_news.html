@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>{% if pid == 1 %}资讯管理{% elif pid == 2 %}基本信息管理{% elif pid == 3 %}公司信息管理{% endif %}</h2>
+                <ol class="breadcrumb">
+                    <li class="active">{% if pid == 1 %}资讯管理{% elif pid == 2 %}帮助中心管理{% elif pid == 3 %}公司信息管理{% endif %}</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="manage_news?pid={{pid}}" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>{% if pid == 1 %}修改资讯{% elif pid == 2 %}修改帮助{% elif pid == 3 %}修改公司信息{% endif %}</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_news?pid={{pid}}" method="post" name="save_content" style="border-radius: 0px;">
+        {% else %}
+        <div class="container-fluid" id="pcont">
+                <div class="page-head">
+                    <h2>{% if pid == 1 %}资讯管理{% elif pid == 2 %}帮助管理{% elif pid == 3 %}公司信息管理{% endif %}</h2>
+                    <ol class="breadcrumb">
+                        <li class="active">{% if pid == 1 %}资讯管理{% elif pid == 2 %}帮助管理{% elif pid == 3 %}公司信息管理{% endif %}</li>
+                    </ol>
+                </div>
+                <div class="cl-mcont">
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="block-flat">
+                        <div class="pull-right">
+                            <a href="manage_news?pid={{pid}}" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                        </div>
+                        <div class="header">
+                            <h3>{% if pid == 1 %}添加资讯{% elif pid == 2 %}添加帮助{% elif pid == 3 %}添加公司信息{% endif %}</h3>
+                        </div>
+
+                        <div class="content">
+                            <form class="form-horizontal group-border-dashed" action="/manage/add_news?pid={{pid}}" method="post" name="add_news" style="border-radius: 0px;">
+
+        {% endif %}
+
+
+                    
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">标题</label>
+                                <div class="col-sm-6">
+                                    {{ form.title }}
+                                    {% for error in form.errors.title %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">内容：</label>
+                                <div class="col-sm-6">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <script id="editor" name="editor" type="text/plain" style="width: 100%;height: 380px">{{thiscontent|safe}}</script>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">可见性</label>
+                                <div class="col-sm-6">
+                                    {{ form.display }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    
+ 
+    
+
+    {% endblock %}
+    {% block js %}
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.config.js') }}?v=1.9.3"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.all.min.js') }}"> </script>
+    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var ue = UE.getEditor('editor', {
+                serverUrl: "/manage/uploads/"
+            });
+            var massage = $('[name="messages"]').children('li').data('message');
+            if(massage){
+                $.gritter.add({
+                    title: '修改成功',
+                    text: massage,
+                    class_name: 'success'
+                });
+                $(function () {
+                    setTimeout(ChangeTime, 1000);
+                });
+                
+            }else if(massage == null){
+
+            }
+            function ChangeTime() {
+                var time;
+                time = $("#time").text();
+                time = parseInt(time);
+                time--;
+                if (time <= 0) {
+                    window.location.href = "/manage/manage_news?pid={{pid}}";
+                } else { 
+                    $("#time").text(time); 
+                    setTimeout(ChangeTime, 1000); 
+                } 
+            };
+
+            $('#userid').val('{{ current_user.id }}');
+
+            {% if this == 'edit' %}
+                ue.addListener("ready", function () {
+                        // editor准备好之后才可以使用
+                        getCont = $('#content').val()
+                        ue.setContent(getCont, false);
+
+                });
+            {% endif %}
+        });
+    </script>
+   
+
+    {% endblock %}
+

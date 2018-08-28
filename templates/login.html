@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>{{title}}</title>
+	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='admin/js/jquery.gritter/css/jquery.gritter.css')}}">
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="{{url_for('static',filename='admin/js/bootstrap/dist/css/bootstrap.css')}}">
+
+	<link rel="stylesheet" href="{{url_for('static',filename='admin/fonts/font-awesome-4/css/font-awesome.min.css')}}">
+
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" href="{{url_for('static',filename='admin/css/style.css')}}">
+
+</head>
+
+<body class="texture">
+
+<div id="cl-wrapper" class="login-container">
+
+	<div class="middle-login">
+		<div class="block-flat">
+			<div class="header">							
+				<h3 class="text-center">登录系统</h3>
+			</div>
+			<div>
+				<form style="margin-bottom: 0px !important;" class="form-horizontal" action="{{url_for('manage.login')}}" method="post" name="login">
+					{{ form.hidden_tag() }}
+					<div class="content">
+						<h4 class="title">登录系统</h4>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="fa fa-user"></i></span>
+										<!-- <input type="text" placeholder="用户名" id="username" class="form-control"> -->
+										{{ form.user_name }}
+										{% for error in form.errors.user_name %}
+											<p style="color:red;">[-] {{ error }}</p>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+										<!-- <input type="password" placeholder="密码" id="password" class="form-control"> -->
+										{{ form.user_password }}
+										{% for error in form.errors.user_password %}
+										<p style="color:red;">[-] {{ error }}</p>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							{{ form.remember_me }}
+							
+					</div>
+					<div class="foot">
+						<button class="btn btn-default" data-dismiss="modal" type="button">重填</button>
+						<!-- <button class="btn btn-primary" data-dismiss="modal" type="submit">登录</button> -->
+						{{ form.submit }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul name="messages" style="display: none">
+        {% for message in messages %}
+        <li data-message="{{ message }}"></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+	
+</div>
+
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.js')}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/behaviour/general.js')}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.gritter/js/jquery.gritter.js')}}"></script>
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            var massage = $('[name="messages"]').children('li').data('message');
+            var itfile="登录失败";
+	        if(massage != null){
+		        if(massage.indexOf(itfile)>=0){
+		            $.gritter.add({
+		                title: '登录失败',
+		                text: massage,
+		                class_name: 'danger'
+		            });
+		        }
+	        }
+        });
+
+    </script>
+</body>
+</html>

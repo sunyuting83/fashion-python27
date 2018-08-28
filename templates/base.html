@@ -1,0 +1,57 @@
+{% if not current_user.is_authenticated %}
+    <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.js')}}"></script>
+    <script type="text/javascript">
+        $(function () {
+            setTimeout(ChangeTime, 1000);
+        });
+     
+        function ChangeTime() {
+            var time;
+            time = $("#time").text();
+            time = parseInt(time);
+            time--;
+            if (time <= 0) {
+                window.location.href = "/manage/login";
+            } else { 
+                $("#time").text(time); 
+                setTimeout(ChangeTime, 1000); 
+            } 
+        }
+    </script>
+    <h1>您还没有登录,<span id="time">2</span>秒钟自动转到登录页</h1>
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{url_for('static',filename='admin/images/favicon.png')}}">
+    <title>后台管理系统</title>
+    {% include 'css.html' %}
+    {% block css %}{% endblock %}
+
+</head>
+<body>
+
+    <!-- Fixed navbar -->
+    {% include 'header.html' %}
+
+    <div id="cl-wrapper" class="fixed-menu {% if pagename == 'product' %}sb-collapsed{% endif %}">
+        
+        {% include 'leftmenu.html' %}
+
+        
+
+
+                {% block content %}{% endblock %}
+
+            
+
+    </div>
+    {% include 'js.html' %}
+    {% block js %}{% endblock %}
+</body>
+</html>
+{% endif %}

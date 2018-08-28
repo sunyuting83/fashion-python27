@@ -1,0 +1,83 @@
+{% if current_user.group.power == 0  %}
+{% extends "base.html" %}
+
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>产品组管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">产品组管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="{{url_for('manage.add_team')}}" type="button" class="btn btn-primary"><i class="fa fa-users"></i> 添加产品组</a>
+                    </div>
+                    <div class="header">
+                        <h3>产品组管理</h3>
+                    </div>
+                    <div class="content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>产品组名称</th>
+                                    <th class="text-right" style="width: 40%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if teamlist %}
+                                    {% for team in teamlist %}
+                                    <tr name="silderList">
+                                        <td>{{team.id}}</td>
+                                        <td>{{team.title}}</td>
+                                        <td class="text-right" style="width: 40%">
+                                            <a class="btn btn-info btn-sm" href="{{url_for('manage.edit_team', id = team.id)}}">
+                                                <i class="fa fa-pencil"></i>
+                                                修改
+                                            </a> 
+                                            <button class="btn btn-danger btn-sm" name="del" data-id="{{team.id}}">
+                                                <i class="fa fa-times"></i>
+                                                删除
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan='5' class="text-center danger"><h3>没有数据</h3></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+<script type="text/javascript">
+
+    // 删除用户
+    $('[name="del"]').click(function(event) {
+        var geturl = "{{url_for('manage.del_team')}}";
+        var getdata = {
+            id: $(this).data('id')
+        };
+        var active = '删除';
+        LockLayer(active,geturl,getdata)
+    });
+    
+    
+</script>
+{% endblock %}
+{% endif %}

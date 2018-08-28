@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+
+	    <title>图片上传</title>
+		
+    	<link rel="stylesheet" type="text/css" href="../bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="./webuploader.css">
+        <link rel="stylesheet" type="text/css" href="./demo.css">
+        <style type="text/css">
+			.bs-example button {
+				margin-left: 20px;
+				margin-top: 20px;
+			}
+            button[name="itok"] {
+                padding: 0 18px;
+                display: inline-block;
+                border-radius: 3px;
+                margin-left: 10px;
+                cursor: pointer;
+                font-size: 14px;
+                float: left;
+                line-height: 40px;
+            }
+        </style>
+	</head>
+	<body>
+		<div id="uploader" class="wu-example">
+            <div class="bs-example">
+            	<input type="hidden" name="colorid" id="colorid">
+            	<input type="hidden" name="imgpath" id="imgpath">
+            </div>
+            <div class="queueList">
+                <div id="dndArea" class="placeholder">
+                    <div id="filePicker"></div>
+                    <p>或将照片拖到这里，单次最多可选300张</p>
+                </div>
+            </div>
+            <div class="statusBar" style="display:none;">
+                <div class="progress">
+                    <span class="text">0%</span>
+                    <span class="percentage"></span>
+                </div><div class="info"></div>
+                <div class="btns">
+                    <div id="filePicker2"></div>
+                    <div class="uploadBtn">开始上传</div>
+                    <button type="button" name="itok" class="btn btn-success" disabled="disabled">确定完成</button>
+                </div>
+            </div>
+        </div>
+	</body>
+
+
+    <script src="../jquery.js"></script>
+    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/webuploader15/webuploader-0.1.5/webuploader.js')}}?v=1.0"></script> -->
+    <script src="./webuploader.min.js"></script>
+    <script type="text/javascript" src="./color_uploader.js"></script>
+    <script type="text/javascript">
+    	var index = parent.layer.getFrameIndex(window.name);
+    	$('[name="itok"]').click(function(event) {
+            // console.log('sdf');
+            var picid = $('#colorid').val();
+            var picpath = $('#imgpath').val();
+            // 传值给父页面
+            var overid = [];
+            var _parentVal = parent.$('#picid');
+            if(_parentVal.val().length > 0){
+                overid.push(_parentVal.val());
+            }
+            overid.push(picid);
+            _parentVal.val(overid);
+
+            var imgshow ='';
+            var picpaths = new Array(); //定义一数组 
+            picpaths = picpath.split(","); //字符分割
+            picids = picid.split(","); 
+            for (i = 0; i < picpaths.length && i < picids.length ; i++ ) {
+                imgshow += '<li class="upimg" data-sort="'+picids[i]+'"><img src="'+picpaths[i]+'" /><em><i class="fa fa-trash-o"></i> 删除图片</em></li>';
+            };
+            var pilen = picpaths[0].length - 7; //获取到第一张图片的长度减去后缀
+            var giveimg = picpaths[0].substr(0,pilen); //去掉后缀
+            giveimg = giveimg + '60.jpg'; //重新添加后缀
+            // console.log(giveimg);
+            parent.$('.upimgshow').append(imgshow);
+            parent.$('[name="addDom"]').data('imgpath',giveimg); //给上一页图片赋值
+            // parent.$('.showeditpic').show();
+            parent.layer.close(index); //关闭窗口
+        });
+    </script>
+</html>

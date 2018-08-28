@@ -1,0 +1,181 @@
+<div class="cl-sidebar" data-position="right" data-step="1">
+            <div class="cl-toggle">
+                <i class="fa fa-bars"></i>
+            </div>
+            <div class="cl-navblock">
+                <div class="menu-space">
+                    <div class="content">
+                        <div class="side-user">
+                            <div class="avatar">
+                                <img src="{{url_for('static',filename='admin/images/avatar1_50.jpg')}}" alt="Avatar" />
+                            </div>
+                            <div class="info">
+                                <span>{{ current_user.group.name }}</span>
+                                <a href="#">{{ current_user.username }}</a>
+                                <img src="{{url_for('static',filename='admin/images/state_online.png')}}" alt="Status" />
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <ul class="cl-vnavigation">
+                            <li class="{% if active %}active{% endif %}">
+                                <a href="{{url_for('manage.index')}}">
+                                    <i class="fa fa-home"></i>
+                                    <span>快速入口</span>
+                                </a>
+                            </li>
+                            {% if current_user.group.power <= 1  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-cogs"></i>
+                                    <span>系统管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    {% if current_user.group.power == 0  %}
+                                    <!-- <li class="{% if pagename == 'manage_group' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_group')}}">权限组管理</a>
+                                    </li> -->
+                                    <li class="{% if pagename == 'manage_team' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_team')}}">产品组管理</a>
+                                    </li>
+                                    {% endif %}
+                                    {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'manage_user' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_user')}}">管理员管理</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power == 0  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-cog"></i>
+                                    <span>基本信息管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    {#
+                                    <li class="{% if pagename == 'company' %}active{% endif %}">
+                                        <a href="{{url_for('manage.company', getid = 1)}}">公司运作理念</a>
+                                    </li>
+                                    <li class="{% if pagename == 'company_plan' %}active{% endif %}">
+                                        <a href="{{url_for('manage.company', getid = 2)}}">公司目标与规划</a>
+                                    </li>#}
+                                    <li class="{% if pagename == 'manage_company' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_news', pid = 3)}}">公司信息管理</a>
+                                    </li>
+                                    <li class="{% if pagename == 'help' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_news', pid = 2)}}">帮助中心管理</a>
+                                    </li>
+                                    <li class="{% if pagename == 'silder' %}active{% endif %}">
+                                        <a href="{{url_for('manage.silder')}}">轮显广告管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power <= 2  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-puzzle-piece"></i>
+                                    <span>产品管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'manage_classify' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_classify')}}">产品分类管理</a>
+                                    </li>
+                                    {% endif %}
+                                    {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'manage_recommend' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_recommend')}}">产品推荐类型</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="{% if pagename == 'product' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_product', pid = 0)}}">产品管理</a>
+                                    </li>
+                                    {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'manage_size' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_size')}}">尺码说明</a>
+                                    </li>
+                                    {% endif %}
+                                    {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'manage_wash' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_wash')}}">产品洗涤说明</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power <= 2  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-calendar-o nav-icon"></i>
+                                    <span>订单管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="{% if pagename == 'manage_order' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_order', order_type = 0, state = 0, page = 1)}}">订单管理</a>
+                                    </li>
+                                    <li class="{% if pagename == 'manage_jdorder' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_order', order_type = 1, state = 0, page = 1)}}">借调订单管理</a>
+                                    </li>
+                                     {% if current_user.group.power <= 1  %}
+                                    <li class="{% if pagename == 'order_statistics' %}active{% endif %}">
+                                        <a href="{{url_for('manage.order_statistics')}}">订单统计分析</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power <= 2  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    <span>客户管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    {% if current_user.group.power <= 0  %}
+                                    <li class="{% if pagename == 'reg_customers' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_customers')}}">客户注册审核</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="{% if pagename == 'manage_customers' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_customers', verify = 0, status = 0)}}">客户管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power <= 3  %}
+                            <li class="{% if pagename == 'manage_news' %}active{% endif %}">
+                                <a href="{{url_for('manage.manage_news', pid = 1)}}">
+                                    <i class="fa fa-pencil-square"></i>
+                                    <span>资讯管理</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if current_user.group.power <= 2  %}
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-phone"></i>
+                                    <span>联系我们管理</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="{% if pagename == 'contact_us' %}active{% endif %}">
+                                        <a href="{{url_for('manage.contactus')}}">联系我们内容管理</a>
+                                    </li>
+                                    <li class="{% if pagename == 'manage_guestbook' %}active{% endif %}">
+                                        <a href="{{url_for('manage.manage_guestbook', status = 0, page = 1)}}">留言列表管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="text-right collapse-button" style="padding:7px 9px;">
+                    
+                    <button id="sidebar-collapse" class="btn btn-default" style="">
+                        <i style="color:#fff;" class="fa fa-angle-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,15 @@
+__init__.py			入口文件
+view.py				显示文件
+admin.py			管理员管理
+admin_group.py		管理组管理
+admin_team.py		部门管理
+classify.py			分类管理
+manage_product.py	产品管理
+company.py			公司简介
+contactus.py		联系我们
+manage_news.py		资讯、帮助管理
+model.py			数据库
+public.py			登录、退出、上传等公用
+silder.py			轮显管理
+wash.py				洗涤说明管理
+uploader.py			上传组件

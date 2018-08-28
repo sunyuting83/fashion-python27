@@ -1,0 +1,27 @@
+base.html	父模版
+header.html	头部模版
+css.html	css模版
+js.html		js模版
+leftmenu.html	左侧菜单模版
+login.html	登录模版
+index.html	首页模版
+
+manage_group.html	用户组管理
+-add_group.html	添加用户组
+-edit_group.html	修改用户组
+
+manage_user.html	admin管理
+-edit_admin.html	修改管理员 + 添加管理员
+
+company.html	公司简介管理
+
+contactus.html	联系我们管理
+edit_contact.html	修改联系我们 + 添加联系我们
+
+manage_news.html	资讯、帮助管理
+-edit_news.html		资讯、帮助添加、修改
+
+
+
+
+

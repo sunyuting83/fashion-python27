@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>{% if pid == 1 %}资讯管理{% elif pid == 2 %}基本信息管理{% elif pid == 3 %}公司信息管理{% endif %}</h2>
+                <ol class="breadcrumb">
+                    <li class="active">{% if pid == 1 %}资讯管理{% elif pid == 2 %}帮助中心管理{% elif pid == 3 %}公司信息管理{% endif %}</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right margin-left10">
+                        <form class="form-horizontal group-border-dashed" action="/manage/manage_news" method="get" name="manage_news" style="border-radius: 0px;">
+                            <div class="input-group">
+                                <input type="hidden" name="pid" value="{{pid}}">
+                                <input type="text" name="title" class="form-control" placeholder="请输入关键字">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="pull-right">
+                        <a href="add_news?pid={{pid}}" type="button" class="btn btn-primary"><i class="fa fa-plus"></i> {% if pid == 1 %}添加资讯{% elif pid == 2 %}添加帮助{% elif pid == 3 %}添加公司信息{% endif %}</a>
+                    </div>
+                    
+                    <div class="pull-right">
+                        <button type="submit" name="allselet" class="btn btn-primary btn-danger"><i class="fa fa-times"></i> 删除</button>
+                    </div>
+                    <div class="header">
+                        <h3>{% if pid == 1 %}资讯管理{% elif pid == 2 %}帮助中心管理{% elif pid == 3 %}公司信息管理{% endif %}</h3>
+                    </div>
+                    {% if title %}
+                        <div class="header">
+                            <h5>您搜索包含 “<span style="color:#ED5B56">{{title}}</span>” 的信息共有 <span style="color:#ED5B56">{{newcont}}</span> 条</h5>
+                        </div>
+                    {% endif %}
+                    <div class="content" name="checks">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input id="check-all" type="checkbox" name="checkall" /></th>
+                                    <th><b>ID</b></th>
+                                    <th style="width: 40%"><b>资讯标题</b></th>
+                                    <th><b>发布人</b></th>
+                                    <th><b>发布时间</b></th>
+                                    <th class="text-right"><b>操作</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if newslist %}
+                                    {% for news in newslist %}
+                                    <tr>
+                                        <td><input type="checkbox" name="getid" id="{{news.id}}" value="{{news.id}}" /></td>
+                                        <td>{{news.id}}</td>
+                                        <td>{{news.title}}</td>
+                                        <td>{{news.post_user.username}}</td>
+                                        <td>时间： {{news.addtime}}</td>
+                                        <td class="text-right">
+                                            <a class="btn btn-info btn-sm" href="edit_news?pid={{pid}}&id={{news.id}}">
+                                                <i class="fa fa-pencil"></i>
+                                                修改
+                                            </a> 
+                                            <button type="button" class="btn btn-danger btn-sm" name="del_news" data-id="{{news.id}}">
+                                                <i class="fa fa-times"></i>
+                                                删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan='6' class="text-center danger"><h3>没有数据</h3></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <ul class="pagination pagination-lg">
+                        {% if page %}
+                            <li><a href="manage_news?pid={{pid}}&page={{previous}}&title={{title}}">«</a></li>
+                            {% for pages in page %}
+                                <li><a href="manage_news?pid={{pid}}&page={{pages}}&title={{title}}">{{pages}}</a></li>
+                            {% endfor %}
+                            <li><a href="manage_news?pid={{pid}}&page={{nextp}}&title={{title}}">»</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    // 单个删除
+    $('button[name="del_news"]').click(function(event) {
+        var geturl = "/manage/del_news";
+        var getdata = {
+            id: $(this).data('id')
+        };
+        var post = false;
+        var active = '删除';
+        LockLayer(active,geturl,getdata)
+    });
+    
+
+    // 全部删除
+    $('button[name="allselet"]').click(function(event) {
+        var geturl = "/manage/del_news";
+        var post = true;
+        var getdata = {
+            id: ListId
+        };
+        var active = '删除';
+        LockLayer(active,geturl,getdata,post)
+    });
+
+    // 调用分页函数
+    pagination("{{page_cont}}");
+
+        
+</script>
+{% endblock %}

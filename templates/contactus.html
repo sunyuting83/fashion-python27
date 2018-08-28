@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+    {% block css %}
+    <link type="text/css" rel="stylesheet" href="{{url_for('static',filename='admin/js/jquery.switch/lc_switch.css')}}">
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>联系我们管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">联系我们内容管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+                {% if contactlist %}
+                    
+                    <div class="row dash-cols">
+                        {% for contact in contactlist %}
+                        <div class="col-sm-6 col-md-6 col-lg-4">
+                            <div class="block">
+                                <div class="header">
+                                    <h2>
+                                        <i class="fa fa-user"></i>
+                                        {{contact.name}}
+                                        <div class="pull-right">
+                                            <input name="shows" type="checkbox" class="lcs_check" autocomplete="off" id="{{contact.id}}" {% if contact.contact == 0 %}checked{% endif %} value="{{contact.contact}}" />
+                                        </div>
+                                    </h2>
+                                </div>
+                                <div class="content no-padding ">
+                                    <ul class="items">
+                                        <li>
+                                            <i class="fa fa-coffee text-center" style="width:35px"></i><small>职位</small>
+                                            {{contact.title}}
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-mobile text-center" style="width:35px"></i><small>联系电话</small>
+                                            {{contact.phone}}
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-envelope text-center" style="width:35px"></i><small>邮件</small>
+                                            {{contact.mail}}
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-comments text-center" style="width:35px"></i><small>微信</small>
+                                            {{contact.wechat}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                {% else %}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="text-center danger"><h3>没有数据</h3></td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
+
+            
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.switch/lc_switch.js')}}"></script>
+<script type="text/javascript">
+    $('input').iCheck({
+        checkboxClass: '',
+        radioClass: ''
+    });
+    $('input[name="shows"]').lc_switch();
+    $('body').delegate('.lcs_check', 'lcs-statuschange', function() {
+        var id = $(this).attr('id'), status = $(this).val(),geturl = "/manage/up_contact";
+        if (status == 0) {
+
+            var getdata = {
+                id: id,
+                status: 1
+            };
+            upstatus(geturl,getdata)
+            
+        }else {
+            var getdata = {
+                id: id,
+                status: 0
+            };
+            upstatus(geturl,getdata)
+        }
+    });
+    function upstatus(geturl,getdata) {
+        $.ajax({
+            activate: 'get',
+            url: geturl,
+            data: getdata,
+            dataType: 'json',
+            traditional: false,
+            beforeSend:function(XMLHttpRequest){ 
+            }, 
+            success:function(data,textStatus){ 
+                if(data.state == 'ok'){
+                    layer.msg('成功');
+                }else{
+                    layer.confirm('失败', {
+                        btn: ['点击刷新']
+                    },function(){
+                        return window.location.reload()
+                    });
+                }
+            }, 
+            complete:function(XMLHttpRequest,textStatus){ 
+                //HideLoading(); 
+            }, 
+            error:function(){ 
+                //请求出错处理 
+            } 
+        });
+    };
+
+
+</script>
+{% endblock %}

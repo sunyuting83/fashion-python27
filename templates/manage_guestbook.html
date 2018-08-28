@@ -1,0 +1,117 @@
+{% if current_user.group.power <= 2 and current_user.group.power >= 0 %}
+{% extends "base.html" %}
+    {% block css %}
+        <style type="text/css">
+            .blue {color:#2494F2;}
+            .red {color:#E23923}
+            .yellow {}
+            .orange {}
+            .green {}
+        </style>
+    {% endblock %}
+    {% block content %}
+
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>{% if stat == 0 %}未读留言{% else %}已读留言{% endif %}</h2>
+                <ol class="breadcrumb">
+                    <li class="active">留言管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+                <div class="container-fluid">
+                    <div class="mail-inbox">
+                        <div class="filters" {% if stat == 1 %}style="height:44px"{% endif %}>
+                            {% if stat == 0 %}<input id="check-all" type="checkbox" name="checkall" />   全选{% endif %}
+
+                            <div class="pull-right">
+                                {% if stat == 0 %}<button class="btn btn-sm btn-warning" type="button" name="biaoji"><i class="fa fa-folder-open"></i> 标记已读</button>{% endif %}
+                            </div>
+                            <div class="btn-group pull-right">
+                                <button data-toggle="dropdown" class="btn btn-sm btn-flat btn-default dropdown-toggle" type="button">
+                                    {% if stat == 0 %}未读信息{% else %}已读信息{% endif %} <span class="caret"></span>
+                                </button>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li><a href="{{url_for('manage.manage_guestbook', status = 0, page = 1)}}">未读信息</a></li>
+                                    <li><a href="{{url_for('manage.manage_guestbook', status = 1, page = 1)}}">已读信息</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="mails" name="checks">
+                            {% if booklist %}
+                            {% for od in booklist|sort(attribute='addtime') %}
+                                <div class="item">
+                                    {% if stat == 0 %}<div><input type="checkbox" name="getid" id="{{od.id}}" value="{{od.id}}" /> </div>{% endif %}
+                                    <div>
+                                        <span class="date pull-right">
+                                            <p style="margin-bottom: 10px">
+                                                {{od.addtime}}
+                                            </p>
+                                            <p>
+                                                {% if stat == 0 %}
+                                                <span class="label label-danger">
+                                                    <i class="fa fa-envelope"></i> 
+                                                    未读
+                                                </span>
+                                                {% else %}
+                                                    <span class="label label-success">
+                                                    <i class="fa fa-envelope-o"></i> 
+                                                    已读
+                                                </span>
+                                                {% endif %}
+                                            </p>
+                                        </span>
+                                        <h5>{{od.users.company}} <small>{{od.users.truename}}</small></h5>
+                                        <h3 class="from">{{od.users.phone}} <span style="margin-left: 10px">{{od.users.mail}}</span></h3>
+                                        <h4>{{od.content}}</h4>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                <div class="item">
+                                    <div>
+                                        <h1 class="from text-center">没有数据</h1>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <ul class="pagination pagination-lg">
+                        {% if page %}
+                            <li><a href="{{url_for('manage.manage_guestbook', status = 0, page= previous)}}">«</a></li>
+                            {% for pages in page %}
+                                <li><a href="{{url_for('manage.manage_guestbook', status = 0, page= pages)}}">{{pages}}</a></li>
+                            {% endfor %}
+                            <li><a href="{{url_for('manage.manage_guestbook', status = 0, page= nextp)}}">»</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+<script type="text/javascript">
+
+    // 全部删除
+    $('button[name="biaoji"]').click(function(event) {
+        var geturl = "{{url_for('manage.upbooks')}}";
+        var post = true;
+        var getdata = {
+            id: ListId
+        };
+        var active = '标记已读';
+        LockLayer(active,geturl,getdata,post)
+    });
+    pagination("{{page_cont}}")
+    
+    
+</script>
+{% endblock %}
+{% endif %}

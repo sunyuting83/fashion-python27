@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+    {% block css %}  
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='admin/js/webuploader/webuploader.css')}}">
+    {% endblock %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>推荐类型管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">推荐类型管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="manage_recommend" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>修改推荐类型</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_recommend" method="post" name="edit_recommend" style="border-radius: 0px;">
+        {% else %}
+        <div class="container-fluid" id="pcont">
+                <div class="page-head">
+                    <h2>推荐类型管理</h2>
+                    <ol class="breadcrumb">
+                        <li class="active">推荐类型管理</li>
+                    </ol>
+                </div>
+                <div class="cl-mcont">
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="block-flat">
+                        <div class="pull-right">
+                            <a href="manage_recommend" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                        </div>
+                        <div class="header">
+                            <h3>添加推荐类型</h3>
+                        </div>
+
+                        <div class="content">
+                            <form class="form-horizontal group-border-dashed" action="/manage/add_recommend" method="post" name="add_recommend" style="border-radius: 0px;">
+
+        {% endif %}
+
+
+                    
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">排序</label>
+                                <div class="col-sm-6">
+                                    {{ form.sort }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">推荐类型名</label>
+                                <div class="col-sm-6">
+                                    {{ form.titles }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">上传图片</label>
+                                {% if this == 'edit' %}
+                                <div class="col-sm-6">
+                                    {% if iconurl %}
+                                        <img src="" name="oldpic" data-img="{{iconurl.icon_url.picurl}}">
+                                    {% endif %}
+                                    <div id="picker">重新选择图片</div>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:0%;"></div>
+                                    </div>
+                                    
+                                </div>
+                                {% else %}
+                                <div class="col-sm-6">
+                                    <div id="picker">请选择</div>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:0%;"></div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group" name="showimg" style="display: none">
+                                <div class="col-sm-12">
+                                    <img src="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    
+ 
+    
+
+    {% endblock %}
+    {% block js %}
+
+    <script src="{{url_for('static',filename='admin/js/webuploader/webuploader.min.js')}}"></script>
+    <script type="text/javascript">
+        var massage = $('[name="messages"]').children('li').data('message');
+        if(massage){
+            $.gritter.add({
+                title: '修改成功',
+                text: massage,
+                class_name: 'success'
+            });
+            $(function () {
+                setTimeout(ChangeTime, 1000);
+            });
+            
+        }else if(massage == null){
+
+        }
+        function ChangeTime() {
+            var time;
+            time = $("#time").text();
+            time = parseInt(time);
+            time--;
+            if (time <= 0) {
+                window.location.href = "/manage/manage_recommend";
+            } else { 
+                $("#time").text(time); 
+                setTimeout(ChangeTime, 1000); 
+            } 
+        };
+
+        $('#topid').val("{{topid}}");
+
+        // 获取传来的排序参数
+        var lastbn = getUrlParam("lastbn");
+        if(lastbn != null){
+            $('#sort').val(lastbn);
+        };
+
+        // 旧图片显示
+        var pic_element = $('[name="oldpic"]')
+        if(pic_element.length>0){
+            var imgad = pic_element.data('img');
+            
+            var strs= new Array(); //定义一数组 
+            strs=imgad.split(","); //字符分割
+            for (i=0;i<strs.length ;i++ ) { 
+            }
+            var imgout = strs[2];
+            pic_element.attr('src',imgout)
+        };
+
+        // 图片上传控件
+        $('.progress').hide();
+
+        var task_id = WebUploader.Base.guid();
+        var uploader = WebUploader.create({
+            swf: './static/webuploader/Uploader.swf',
+            server: '/manage/upload',
+            pick: '#picker',
+            multiple: false,
+            accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif'
+                },
+            auto: true,
+            threads: 3,
+            duplicate: true,
+            formData: {
+                task_id: task_id,
+            },
+        });
+        uploader.on('startUpload', function() {
+            $('#progress').show();
+            $('.progress-bar').css('width', '0%');
+            $('.progress-bar').text('0%');
+            $('.progress-bar').removeClass('progress-bar-danger progress-bar-success');
+            $('.progress-bar').addClass('active progress-bar-striped');
+            $('.progress').show();
+
+            // 修改轮显时，判断旧图片显示
+            var pic_element = $('[name="oldpic"]')
+            if(pic_element.length>0){ 
+                pic_element.hide();
+            };
+
+            // 多次选择图片，删除之前图片
+            var needimg = $('[name="showimg"]').find('img').attr('src');
+            var picid = $('#icon').val();
+            // console.log(needimg,picid);
+
+            if(needimg.length>0 && picid != null && picid != ''){
+                console.log('有图片');
+                $.ajax({
+                     url: '/manage/del_pic?picid='+picid,
+                     dataType: 'json',
+                     method: 'GET',
+                     success: function(data) {
+                        // console.log(data)
+                     },
+                     error: function(xhr) {
+                         // 导致出错的原因较多，以后再研究
+                         // console.log(xhr)
+                     }
+                });
+            }
+
+
+        });
+        uploader.on('uploadProgress', function(file, percentage) {
+            $('.progress-bar').css('width', percentage * 100 - 1 + '%');
+            $('.progress-bar').text(Math.floor(percentage * 100 - 1) + '%');
+        });
+        uploader.on('uploadSuccess', function(file,response) {
+            $('.progress-bar').css('width', '100%');
+            $('.progress-bar').text('100%');
+            $('.progress-bar').addClass('progress-bar-success');
+            $('.progress-bar').text('上传完成');
+            // console.log(response.image_path);
+            $('[name="showimg"]').show();
+
+            var imgurl = response.image_path;
+            var imgid  = response.imgid;
+            $('#icon').val(imgid);
+            // console.log(imgurl);
+            var strs= new Array(); //定义一数组 
+            strs=imgurl.split(","); //字符分割
+            for (i=0;i<strs.length ;i++ ) { 
+            }
+            var imgout = strs[2];
+
+            $('[name="showimg"]').find('img').attr({
+                src: imgout
+            });
+        });
+        uploader.on('uploadError', function(file) {
+            $('.progress-bar').css('width', '100%');
+            $('.progress-bar').text('100%');
+            $('.progress-bar').addClass('progress-bar-danger');
+            $('.progress-bar').text('上传失败');
+        });
+        uploader.on('uploadComplete', function(file) {
+            $('.progress-bar').removeClass('active progress-bar-striped');
+        });
+        
+    </script>
+    {% endblock %}
+

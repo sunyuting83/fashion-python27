@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>联系我们管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">修改联系我们内容</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/contactus" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>修改联系我们内容</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_contact" method="post" name="edit_contact" style="border-radius: 0px;">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">排序</label>
+                                <div class="col-sm-6">
+                                    {{ form.sort }}
+                                    {% for error in form.errors.sort %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">部门名称</label>
+                                <div class="col-sm-6">
+                                    {{ form.department }}
+                                    {% for error in form.errors.department %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">职位</label>
+                                <div class="col-sm-6">
+                                    {{ form.title }}
+                                    {% for error in form.errors.title %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">联系人</label>
+                                <div class="col-sm-6">
+                                    {{ form.name }}
+                                    {% for error in form.errors.name %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">电话</label>
+                                <div class="col-sm-6">
+                                    {{ form.phone }}
+                                    {% for error in form.errors.phone %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邮箱</label>
+                                <div class="col-sm-6">
+                                    {{ form.mail }}
+                                    {% for error in form.errors.mail %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">微信</label>
+                                <div class="col-sm-6">
+                                    {{ form.wechat }}
+                                    {% for error in form.errors.wechat %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    {% else %}
+    <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>联系我们管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">联系我们内容管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/contactus" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>添加联系我们</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/add_contact" method="post" name="add_contact" style="border-radius: 0px;">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">排序</label>
+                                <div class="col-sm-6">
+                                    {{ form.sort }}
+                                    {% for error in form.errors.sort %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">部门名称</label>
+                                <div class="col-sm-6">
+                                    {{ form.department }}
+                                    {% for error in form.errors.department %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">职位</label>
+                                <div class="col-sm-6">
+                                    {{ form.title }}
+                                    {% for error in form.errors.title %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">联系人</label>
+                                <div class="col-sm-6">
+                                    {{ form.name }}
+                                    {% for error in form.errors.name %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">电话</label>
+                                <div class="col-sm-6">
+                                    {{ form.phone }}
+                                    {% for error in form.errors.phone %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邮箱</label>
+                                <div class="col-sm-6">
+                                    {{ form.mail }}
+                                    {% for error in form.errors.mail %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">微信</label>
+                                <div class="col-sm-6">
+                                    {{ form.wechat }}
+                                    {% for error in form.errors.wechat %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    {% endif %}
+
+    {% endblock %}
+    {% block js %}
+    <script type="text/javascript">
+        var massage = $('[name="messages"]').children('li').data('message');
+        if(massage){
+            $.gritter.add({
+                title: '修改成功',
+                text: massage,
+                class_name: 'success'
+            });
+            $(function () {
+                setTimeout(ChangeTime, 1000);
+            });
+            
+        }else if(massage == null){
+
+        }
+
+        function ChangeTime() {
+            var time;
+            time = $("#time").text();
+            time = parseInt(time);
+            time--;
+            if (time <= 0) {
+                window.location.href = "/manage/contactus";
+            } else { 
+                $("#time").text(time); 
+                setTimeout(ChangeTime, 1000); 
+            } 
+        };
+
+        // 验证数字
+        
+        $("#phone").onlyNum();
+
+    </script>
+    {% endblock %}
+

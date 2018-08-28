@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+    {% block content %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>基本信息管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">{{thistitle}}</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                
+                <div class="block-flat">
+                    <div class="header">                            
+                        <h3>{{thistitle}}</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="save_company" method="post" name="save_company"  novalidate>
+                            <input type="hidden" id="id" name="id" value="{{thisid}}">
+                            <div class="form-group">
+                                <script id="editor" name="editor" type="text/plain" style="width: 100%;height: 380px">{{thiscontent|safe}}</script>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                  <button type="submit" class="btn btn-primary">确定</button>
+                                  <button class="btn btn-default">清除</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                    
+            </div>
+            
+
+        </div>
+    </div>
+
+    {% endblock %}
+
+    {% block js %}
+        <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.config.js') }}?v=1.9.2"></script>
+        <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.all.min.js') }}"> </script>
+        <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+        <script type="text/javascript">
+            var ue = UE.getEditor('editor', {
+                serverUrl: "/upload/"
+            });
+        </script>
+    {% endblock %}

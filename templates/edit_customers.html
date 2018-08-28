@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+    {% block css %}  
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='admin/js/webuploader/webuploader.css')}}">
+    {% endblock %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>客户管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">客户管理</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/manage_customers?verify=0&status=0" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>修改客户密码</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_customers" method="post" name="edit_customers" style="border-radius: 0px;">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">客户手机号</label>
+                                <div class="col-sm-6">
+                                    {{ userData.phone }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">新密码</label>
+                                <div class="col-sm-6">
+                                    {{ form.password }}
+                                </div>
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <label class="col-sm-3 control-label">重复密码</label>
+                                <div class="col-sm-6">
+                                    {{ form.repassword }}
+                                </div>
+                                <div name="repassword-tip" class="popover fade right in" style="top: -12px; left: 549px; display: none;">
+                                    <div class="arrow" style="top: 41.1765%;"></div>
+                                    <h3 class="popover-title">密码错误</h3>
+                                    <div class="popover-content">请保证两次输入的密码一样。</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">所属组</label>
+                                <div class="col-sm-6">
+                                    {{ userData.team.title }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">公司名称</label>
+                                <div class="col-sm-6">
+                                    {{ userData.company }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邮箱</label>
+                                <div class="col-sm-6">
+                                    {{ userData.mail }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">联系人</label>
+                                <div class="col-sm-6">
+                                    {{ userData.truename }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    {% endif %}
+
+    {% endblock %}
+    {% block js %}
+    <script src="{{url_for('static',filename='admin/js/webuploader/webuploader.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var massage = $('[name="messages"]').children('li').data('message');
+            if(massage){
+                $.gritter.add({
+                    title: '修改成功',
+                    text: massage,
+                    class_name: 'success'
+                });
+                $(function () {
+                    setTimeout(ChangeTime, 1000);
+                });
+                
+            }else if(massage == null){
+
+            };
+            function ChangeTime() {
+                var time;
+                time = $("#time").text();
+                time = parseInt(time);
+                time--;
+                if (time <= 0) {
+                    window.location.href = "manage_customers?verify=0&status=0";
+                } else { 
+                    $("#time").text(time); 
+                    setTimeout(ChangeTime, 1000); 
+                } 
+            }
+
+        });
+
+        $('[name=id]').val("{{userData.id}}");
+
+        function KeyUp() {
+            var a = $('[name="password"]').val();
+            var b = $('[name="repassword"]').val();
+            if (a == b) {
+                $('[name="submit"]').removeAttr('disabled');
+                $('[name="repassword-tip"]').hide();
+            }
+            else {
+                $('[name="submit"]').attr('disabled', 'disabled');
+                $('[name="repassword-tip"]').show();
+            }
+        };
+    </script>
+    {% endblock %}
+

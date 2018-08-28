@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+    {% block css %}
+        <style type="text/css">
+            #iconTemplate > .input-group { 
+                display: inline-block;
+                margin-right: 10px
+            }
+            #iconTemplate > .input-group > img {
+                width: 35px;
+                cursor: pointer;
+            }
+            #iconTemplate > .input-group.active > em {
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                z-index: 99;
+                background: #e44c34;
+                border-radius: 50%;
+            }
+        </style>
+    {% endblock %}
+    {% block content %}
+        {% if this == 'edit' %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>洗涤说明管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">修改洗涤说明</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/manage_wash" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>修改洗涤说明</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/edit_wash" method="post" name="edit_wash" style="border-radius: 0px;">
+        {% else %}
+        <div class="container-fluid" id="pcont">
+            <div class="page-head">
+                <h2>洗涤说明管理</h2>
+                <ol class="breadcrumb">
+                    <li class="active">添加洗涤说明</li>
+                </ol>
+            </div>
+            <div class="cl-mcont">
+
+            <div class="col-sm-12 col-md-12">
+                <div class="block-flat">
+                    <div class="pull-right">
+                        <a href="/manage/manage_wash" type="button" class="btn btn-success"><i class="fa fa-reply"></i> 取消返回</a>
+                    </div>
+                    <div class="header">
+                        <h3>添加洗涤说明</h3>
+                    </div>
+                    <div class="content">
+                        <form class="form-horizontal group-border-dashed" action="/manage/add_wash" method="post" name="add_wash" style="border-radius: 0px;">
+        {% endif %}
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">洗涤说图标</label>
+                                <div class="col-sm-6">
+                                    <div id="iconTemplate"></div>
+                                    <h5 class="color-danger">请点击图标进行选择</h5>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">洗涤说明内容</label>
+                                <div class="col-sm-6">
+                                    {{ form.text }}
+                                    {% for error in form.errors.text %}
+                                        <p style="color:red;">[-] {{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    {{ form.submit }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul name="messages" style="display: none">
+                    {% for message in messages %}
+                    <li data-message="{{ message }}"></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                    
+            </div>
+            
+
+        </div>
+    </div>
+    
+    
+
+    {% endblock %}
+    {% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var massage = $('[name="messages"]').children('li').data('message');
+            if(massage){
+                $.gritter.add({
+                    title: '修改成功',
+                    text: massage,
+                    class_name: 'success'
+                });
+                $(function () {
+                    setTimeout(ChangeTime, 1000);
+                });
+                
+            }else if(massage == null){
+
+            }
+            function ChangeTime() {
+                var time;
+                time = $("#time").text();
+                time = parseInt(time);
+                time--;
+                if (time <= 0) {
+                    window.location.href = "/manage/manage_wash";
+                } else { 
+                    $("#time").text(time); 
+                    setTimeout(ChangeTime, 1000); 
+                } 
+            };
+        });
+
+        // 定义图标数据
+        var iconData = [
+            "{{url_for('static',filename='wash/a_01.png')}}",
+            "{{url_for('static',filename='wash/a_02.png')}}",
+            "{{url_for('static',filename='wash/a_03.png')}}",
+            "{{url_for('static',filename='wash/a_04.png')}}",
+            "{{url_for('static',filename='wash/a_05.png')}}",
+            "{{url_for('static',filename='wash/a_06.png')}}",
+            "{{url_for('static',filename='wash/a_07.png')}}",
+            "{{url_for('static',filename='wash/a_08.png')}}",
+            "{{url_for('static',filename='wash/a_09.png')}}",
+            "{{url_for('static',filename='wash/a_10.png')}}",
+            "{{url_for('static',filename='wash/a_11.png')}}",
+            "{{url_for('static',filename='wash/a_12.png')}}",
+            "{{url_for('static',filename='wash/a_13.png')}}",
+            "{{url_for('static',filename='wash/a_14.png')}}",
+            "{{url_for('static',filename='wash/a_15.png')}}",
+            "{{url_for('static',filename='wash/a_16.png')}}",
+            "{{url_for('static',filename='wash/a_17.png')}}",
+            "{{url_for('static',filename='wash/a_18.png')}}",
+            "{{url_for('static',filename='wash/a_19.png')}}",
+            "{{url_for('static',filename='wash/a_20.png')}}",
+            "{{url_for('static',filename='wash/a_21.png')}}",
+            "{{url_for('static',filename='wash/a_22.png')}}",
+            "{{url_for('static',filename='wash/a_23.png')}}",
+            "{{url_for('static',filename='wash/a_24.png')}}",
+            "{{url_for('static',filename='wash/a_25.png')}}",
+            "{{url_for('static',filename='wash/a_26.png')}}",
+            "{{url_for('static',filename='wash/a_27.png')}}",
+            "{{url_for('static',filename='wash/a_28.png')}}",
+            "{{url_for('static',filename='wash/a_29.png')}}",
+            "{{url_for('static',filename='wash/a_30.png')}}",
+            "{{url_for('static',filename='wash/a_31.png')}}",
+            "{{url_for('static',filename='wash/a_32.png')}}",
+            "{{url_for('static',filename='wash/a_33.png')}}",
+            "{{url_for('static',filename='wash/a_34.png')}}",
+            "{{url_for('static',filename='wash/a_35.png')}}",
+            "{{url_for('static',filename='wash/a_36.png')}}",
+            "{{url_for('static',filename='wash/a_37.png')}}",
+            "{{url_for('static',filename='wash/a_38.png')}}",
+            "{{url_for('static',filename='wash/a_39.png')}}",
+            "{{url_for('static',filename='wash/a_40.png')}}"
+        ];
+        // 把图标数据拆分并写成html加入到页面
+        iconhtml = '';
+        for (var i = 0; i < iconData.length; i++) {
+            // console.log(iconData[i]);
+            iconhtml += '<div class="input-group">'
+                        +'    <img src="'+iconData[i]+'">'
+                        +'    <em></em>'
+                        +'</div>';
+        };
+        $('#iconTemplate').html(iconhtml);
+
+        // 点击图标事件
+        $('#iconTemplate').children('.input-group').each(function(index, el) {
+            // 点击图标事件
+            $(this).click(function(event) {
+                $(this).addClass('active').siblings().removeClass('active');
+                var thisSrc = $(this).children('img').attr('src');
+                $('#icon').val(thisSrc);
+            });
+            // 判断是否存在旧图标
+            oldicon = $('#oldicon');
+            if(oldicon.length>0) {
+                var oldsrc = oldicon.val();
+                if(oldsrc.length>0){
+                    if(oldsrc == $(this).children('img').attr('src')){
+                        $(this).addClass('active');
+                    }
+                }
+            }
+
+        });
+
+        
+    </script>
+    {% endblock %}
+
