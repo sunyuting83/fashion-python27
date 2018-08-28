@@ -1,2 +1,0 @@
-http://www.jb51.net/article/54120.htm
-ln -s /usr/local/mysql/lib/libmysqlclient.so.18 /usr/lib64/libmysqlclient.so.18
