@@ -52,7 +52,7 @@ python run.py
 
 http://yourip/manage/
 
-admin: 用户名：admin   密码：123456789
+admin: 用户名：admin1   密码：123456789
 
 组长: 用户名：ceshi1   密码：123456789
 
