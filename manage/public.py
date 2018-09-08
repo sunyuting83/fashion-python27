@@ -81,7 +81,7 @@ def login():
 		# print form.remember_me.data
 		if user:
 			# login_user(user, form.remember_me.data)
-			login_user(user, True, False, False)
+			login_user(user, False, False, False)
 
 			# 记录登录次数和最后登录时间IP
 			user.last_login_time = datetime.datetime.now()
