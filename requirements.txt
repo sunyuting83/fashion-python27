@@ -9,3 +9,4 @@ yunpian-python-sdk
 requests
 Flask-Mail
 xlwt
+flask-cors
