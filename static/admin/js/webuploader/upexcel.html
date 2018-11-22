@@ -8,8 +8,8 @@
 
 	    <title>Excel上传</title>
 		
-    	<link rel="stylesheet" type="text/css" href="../bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="./webuploader.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.1.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/webuploader.css">
         <style type="text/css">
 			.bs-example button {
 				margin-left: 20px;
@@ -34,10 +34,10 @@
 	</body>
 
 
-    <script src="../jquery.js"></script>
-    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <!-- <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/webuploader15/webuploader-0.1.5/webuploader.js')}}?v=1.0"></script> -->
-    <script src="./webuploader.min.js"></script>
+    <script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.min.js"></script>
     <script type="text/javascript">
         function getStrLength(str) {
             var cArr = str.match(/[^\x00-\xff]/ig);
@@ -48,7 +48,7 @@
             var index = parent.layer.getFrameIndex(window.name);
             var task_id = parent.$("#id").val();
             var uploader = WebUploader.create({
-                swf: './static/webuploader/Uploader.swf',
+                swf: 'http://cdn.staticfile.org/webuploader/0.1.0/Uploader.swf',
                 server: '/manage/upexcel',
                 pick: '#picker',
                 multiple: false,

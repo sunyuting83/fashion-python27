@@ -47,6 +47,6 @@ if __name__ == '__main__':
 	def hello_world():
 		return 'Hello World!'
 
-	app.run(debug=True, host='0.0.0.0', port=5000, threaded=True, ssl_context=('/etc/ssl/168tv.co.crt','/etc/ssl/168tv.co.key'))
+	app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
 	# app.run(debug=True)
 	# application.run(host='0.0.0.0')

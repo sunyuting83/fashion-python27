@@ -7,11 +7,11 @@
 	<meta name="author" content="">
 
 	<title>{{title}}</title>
-	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='admin/js/jquery.gritter/css/jquery.gritter.css')}}">
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css">
 	<!-- Bootstrap core CSS -->
-	<link rel="stylesheet" href="{{url_for('static',filename='admin/js/bootstrap/dist/css/bootstrap.css')}}">
+<link href="https://cdn.bootcss.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
 
-	<link rel="stylesheet" href="{{url_for('static',filename='admin/fonts/font-awesome-4/css/font-awesome.min.css')}}">
+<link href="https://cdn.bootcss.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
 	<link rel="stylesheet" href="{{url_for('static',filename='admin/css/style.css')}}">
@@ -80,10 +80,10 @@
 	
 </div>
 
-<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.js')}}"></script>
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/behaviour/general.js')}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/jquery.gritter/js/jquery.gritter.js')}}"></script>
-<script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
         $(document).ready(function() {
             var massage = $('[name="messages"]').children('li').data('message');

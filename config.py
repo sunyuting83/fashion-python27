@@ -18,9 +18,9 @@ class LocalhostConfig(Config):
 	REDIS_HOST = '127.0.0.1'
 	REDIS_PORT = 6379
 	REDIS_DB = 4
-	REDIS_PASSWORD = 'd39LE5arbMFn'
+	REDIS_PASSWORD = '3SuLc0VvzLJm'
 
-	MYSQL_INFO = "mysql://root:root@127.0.0.1:3306/fashion?charset=utf8"
+	MYSQL_INFO = "mysql://root:penny5921929@127.0.0.1:3306/fashion?charset=utf8"
 	SERVER_URL = "http://localhost:5000/"
 
 	SQLALCHEMY_DATABASE_URI = MYSQL_INFO

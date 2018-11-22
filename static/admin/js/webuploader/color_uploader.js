@@ -41,7 +41,7 @@ jQuery(function() {
             extensions: 'gif,jpg,jpeg,bmp,png',
             mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif'
         },
-        swf: BASE_URL + '/Uploader.swf',
+        swf: BASE_URL + 'http://cdn.staticfile.org/webuploader/0.1.0/Uploader.swf',
         disableGlobalDnd: true,
         chunked: true,
         server: '/manage/upload',

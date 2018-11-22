@@ -100,8 +100,8 @@
     {% endblock %}
     {% block js %}
     <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.config.js') }}?v=1.9.3"></script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/ueditor.all.min.js') }}"> </script>
-    <script type="text/javascript" charset="utf-8" src="{{ url_for('static', filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+    <script type="text/javascript" charset="utf-8" src="https://ueditor.baidu.com/ueditor/ueditor.all.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="https://ueditor.baidu.com/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             var ue = UE.getEditor('editor', {

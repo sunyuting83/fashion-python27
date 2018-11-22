@@ -1,6 +1,6 @@
 {% extends "base.html" %}
     {% block css %}  
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='admin/js/webuploader/webuploader.css')}}">
+    <link rel="stylesheet" type="text/css" href="http://fex.baidu.com/webuploader/css/webuploader.css">
     {% endblock %}
     {% block content %}
         {% if this == 'edit' %}
@@ -119,7 +119,7 @@
     {% endblock %}
     {% block js %}
 
-    <script src="{{url_for('static',filename='admin/js/webuploader/webuploader.min.js')}}"></script>
+    <script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.min.js"></script>
     <script type="text/javascript">
         var massage = $('[name="messages"]').children('li').data('message');
         if(massage){
@@ -174,7 +174,7 @@
 
         var task_id = WebUploader.Base.guid();
         var uploader = WebUploader.create({
-            swf: './static/webuploader/Uploader.swf',
+            swf: 'http://cdn.staticfile.org/webuploader/0.1.0/Uploader.swf',
             server: '/manage/upload',
             pick: '#picker',
             multiple: false,

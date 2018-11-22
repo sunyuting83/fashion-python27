@@ -7,10 +7,12 @@ __pycache__/
 *.so
 *.pyc
 test/
+flask/
 mobile/ReadMe.txt
 
 # Distribution / packaging
 .Python
+.vscode
 build/
 develop-eggs/
 dist/
