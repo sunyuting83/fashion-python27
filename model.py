@@ -14,9 +14,10 @@ import re
 from config import Conf
 
 Domain = 'http://api.1showroomonline.com'
-print(Conf.SQLITE_INFO)
+# print(Conf.SQLITE_INFO)
 engine = create_engine(Conf.SQLITE_INFO, connect_args={'check_same_thread':False}, poolclass=SingletonThreadPool)
 
+# engine = create_engine(Conf.SQLITE_INFO, pool_recycle=7200)
 Base = declarative_base()
 
 db_session = scoped_session(sessionmaker(autocommit=False,

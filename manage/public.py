@@ -82,7 +82,6 @@ def login():
 		if user:
 			# login_user(user, form.remember_me.data)
 			login_user(user, False, False, False)
-			print(current_user.manage_group.id)
 			# 记录登录次数和最后登录时间IP
 			user.last_login_time = datetime.datetime.now()
 			user.login_size += 1

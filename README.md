@@ -2,11 +2,11 @@
 
 一套使用Flask + sqlalchemy + redis + mysql 开发的服装批发APP应用后端
 
-# 环境准备
+### 环境准备
 
 1、安装Redis
 
-2、安装MySQL
+2、~~安装MySQL~~ 已使用SQLite 
 
 3、安装Python 2.7 并创建虚拟环境
 
@@ -15,7 +15,7 @@
 5、进入Mysql建立新库，并导入fashion.sql
 
 
-# 修改配置文件
+### 修改配置文件
 
 修改config.py
 
@@ -28,21 +28,31 @@
   Redis 和 Mail 相关设置
   
 
-# 可能发生的报错：
-
+### 可能发生的报错：
+```
 MySQLdb ImportError: libmysqlclient.so.18
+```
+- 解决办法：
 
-解决办法：
+```
+# Arch Linux
+pacman -S python-mysqlclient
 
-
-32位系统：
-
+# 32位系统：
 ln -s /usr/local/mysql/lib/libmysqlclient.so.18 /usr/lib/libmysqlclient.so.18
-
-64位系统：
-
+# 64位系统：
 ln -s /usr/local/mysql/lib/libmysqlclient.so.18 /usr/lib64/libmysqlclient.so.18
-
+```
+### MySQL to SQLite
+[神器](!https://pypi.org/project/mysql-to-sqlite3/)
+```
+mysql2sqlite -f ~/Works/python/fashion-python27/my.sqlite \
+-d fashion \
+-u root \
+-p root \
+-h localhost \
+-P 3306
+```
 
 # 运行：
 
