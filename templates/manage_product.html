@@ -1,6 +1,6 @@
 {% extends "base.html" %}
     {% block css %}
-    <script type="text/javascript" charset="utf-8" src="{{url_for('static',filename='admin/js/template.js')}}?v=2.1.1"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/gh/sunyuting83/fashion-python27@master/static/admin/js/template.js"></script>
     {% endblock %}
     {% block content %}
         <div class="page-aside app tree">
@@ -312,7 +312,7 @@ $(document).ready(function(){
         var thisrcs = new Array(); //定义一数组 
         thisrcs = src.split(','); //字符分割 
         for (i = 0;i < thisrcs.length ;i++ ) {
-            $(this).attr('src',thisrcs[3]);
+            $(this).attr('src','https://cdn.jsdelivr.net/gh/sunyuting83/fashion-python27@master'+thisrcs[3]);
         };
     });
 
