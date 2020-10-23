@@ -6,7 +6,7 @@ from yunpian_python_sdk.model import constant as YC
 from yunpian_python_sdk.ypclient import YunpianClient
 from config import Conf
 
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 

@@ -5,9 +5,10 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 from wtforms.validators import Required, Email, Length
 from model import Manage, Group, Team, and_, or_, desc, asc, func, db_session
 from manage import api
-from public import *
+from .public import *
 import hashlib
 import datetime
+import email_validator
 
 
 # 修改管理员表单
@@ -170,7 +171,7 @@ def add_admin():
 				savelog(actions)
 				db_session.close()
 			except Exception as e:
-				print e
+				print (e)
 				flash("数据库错误!")
 				return redirect('/manage/add_admin')
 
@@ -202,9 +203,9 @@ def edit_admin():
 		form.phone.data = adminData.phone
 		form.mail.data = adminData.mail
 		form.wechat.data = adminData.wechat
-	print '这里'
+	print ('这里')
 	if form.validate_on_submit():
-		print '哪里'
+		print ('哪里')
 		id = request.form.get('id')
 		status = request.form.get('status')
 		purview = request.form.get('purview')
@@ -232,7 +233,7 @@ def edit_admin():
 			try:
 				db_session.commit()
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				return jsonify({"state":"数据库错误"})
 			db_session.close()
@@ -327,7 +328,7 @@ def my_info():
 			db_session.add(thuser)
 			db_session.commit()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({"state":"数据库错误"})
 		db_session.close()
@@ -355,7 +356,7 @@ def my_password(getid):
 				db_session.add(mypassword)
 				db_session.commit()
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				return jsonify({"state":"数据库错误"})
 			db_session.close()

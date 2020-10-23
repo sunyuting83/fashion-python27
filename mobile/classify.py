@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import Classify, Recommend, db_session, desc, or_
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 

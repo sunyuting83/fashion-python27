@@ -1,5 +1,6 @@
 # coding:utf-8
 import json
+import os
 
 # def loadConfig():
 # 	data = open("config.json")
@@ -13,6 +14,7 @@ class Config(object):
 
 # json_config = loadConfig()
 class LocalhostConfig(Config):
+	basedir = os.path.abspath(os.path.dirname(__file__))
 	DEBUG = True
 
 	REDIS_HOST = '127.0.0.1'
@@ -20,10 +22,11 @@ class LocalhostConfig(Config):
 	REDIS_DB = 4
 	REDIS_PASSWORD = 'BCnb1jzIzHW9'
 
-	MYSQL_INFO = "mysql://root:root@127.0.0.1:3306/fashion?charset=utf8"
+	# SQLITE_INFO = 'sqlite:///'+ os.path.join(basedir,'fashion.sqlite')
+	SQLITE_INFO = "mysql://root:penny5921929@127.0.0.1:3306/fashion?charset=utf8"
 	SERVER_URL = "http://localhost:5000/"
 
-	SQLALCHEMY_DATABASE_URI = MYSQL_INFO
+	SQLALCHEMY_DATABASE_URI = SQLITE_INFO
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	SQLALCHEMY_COMMIT_ON_TEARDOWN =True
 

@@ -107,3 +107,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+fashion.sqlite
+fashion11.sqlite
+fashion11.sqlite.sql
+

@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import UserLike ,db_session, desc, or_, func
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 
@@ -38,7 +38,7 @@ def ilike():
 	try:
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 3, 'message': '收藏失败'})
 
@@ -59,7 +59,7 @@ def dellike():
 		try:
 			db_session.commit()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '取消收藏失败'})
 

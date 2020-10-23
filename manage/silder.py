@@ -5,7 +5,7 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 from wtforms.validators import Required, Email, Length
 from model import Silder, Images, Product, and_, or_, desc, asc, func, db_session
 from manage import api
-from public import *
+from .public import *
 import os
 import math
 
@@ -99,8 +99,8 @@ def edit_silder():
 		picid = request.form.get('picid')
 		sort =  int(request.form.get('sort'))
 
-		print picid
-		print oldpicid
+		print (picid)
+		print (oldpicid)
 
 		# 增加一个旧图片id 再增加一个新图片id 如果两个id相同则不修改。如果不一样则删除旧id的图片和库
 		if picid == '':

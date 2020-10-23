@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import Address, db_session, desc, or_
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 
@@ -46,8 +46,8 @@ def add_address():
 			try:
 				db_session.add(addressd)
 				db_session.commit()
-			except Exception, e:
-				print e
+			except Exception as e:
+				print (e)
 				db_session.rollback()
 				return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -58,7 +58,7 @@ def add_address():
 		db_session.add(addressa)
 		db_session.commit()		
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 0, 'message': '数据库错误'})
 	db_session.close()
@@ -74,8 +74,8 @@ def del_address():
 	db_session.delete(delad)
 	try:
 		db_session.commit()
-	except Exception, e:
-		print e
+	except Exception as e:
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 0, 'message': '数据库错误'})
 	db_session.close()
@@ -94,8 +94,8 @@ def setdf_address():
 		try:
 			db_session.add(addressd)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -104,8 +104,8 @@ def setdf_address():
 	try:
 		db_session.add(setdefault)
 		db_session.commit()
-	except Exception, e:
-		print e
+	except Exception as e:
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -129,8 +129,8 @@ def edit_Address():
 				try:
 					db_session.add(addressd)
 					db_session.commit()
-				except Exception, e:
-					print e
+				except Exception as e:
+					print (e)
 					db_session.rollback()
 					return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -146,7 +146,7 @@ def edit_Address():
 		db_session.add(editaddress)
 		db_session.commit()		
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 0, 'message': '数据库错误'})
 	db_session.close()

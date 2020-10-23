@@ -5,15 +5,17 @@ from sqlalchemy.orm import relationship, backref, sessionmaker, scoped_session, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.pool import SingletonThreadPool
 import datetime
 import json
-import HTMLParser
+from html.parser import HTMLParser
 import cgi
 import re
 from config import Conf
 
-
-engine = create_engine(Conf.MYSQL_INFO, pool_recycle=7200)
+Domain = 'http://api.1showroomonline.com'
+print(Conf.SQLITE_INFO)
+engine = create_engine(Conf.SQLITE_INFO, connect_args={'check_same_thread':False}, poolclass=SingletonThreadPool)
 
 Base = declarative_base()
 
@@ -22,9 +24,6 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 										 bind=engine))
 
 Base.query = db_session.query_property()
-
-Domain = 'http://api.1showroomonline.com'
-
 
 # 解决MYSQL链接超时的问题
 @event.listens_for(engine, "engine_connect")
@@ -170,12 +169,13 @@ class Manage(Base):
 		return False
 
 	def get_id(self):
-		return unicode(self.id)
+		return self.id
 
 	# 查询用户登录
 	@classmethod
 	def login_check(cls, user_name, user_password):
 		user = db_session.query(Manage).filter(Manage.username == user_name, Manage.password == user_password, Manage.status == 0).first()
+		# print(str(user))
 		if not user:
 			return None
 

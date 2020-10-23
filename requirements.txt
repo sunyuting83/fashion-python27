@@ -4,7 +4,6 @@ redis
 flask_wtf
 flask_login
 image
-mysql-python
 yunpian-python-sdk
 requests
 Flask-Mail

@@ -5,7 +5,7 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 
 from model import Guestbook, Users, MuGb, and_, or_, desc, asc, func, db_session
 
-from public import *
+from .public import *
 
 from manage import api
 
@@ -116,7 +116,7 @@ def upbooks():
 				db_session.add(upstatus)
 				db_session.commit()
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				return jsonify({"state":"数据库错误"})
 	else:
@@ -130,7 +130,7 @@ def upbooks():
 					update({MuGb.status : 1})
 				db_session.commit()
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				return jsonify({"state":"数据库错误"})
 	return jsonify({'state':'ok'})

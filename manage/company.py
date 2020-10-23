@@ -5,7 +5,7 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 from wtforms.validators import Required, Email, Length
 from model import Company, and_, or_, desc, asc, func, db_session
 from manage import api
-import HTMLParser
+from html.parser import HTMLParser
 import cgi
 
 

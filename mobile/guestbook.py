@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import Guestbook, MuGb, Manage, db_session, desc, or_
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 
@@ -28,7 +28,7 @@ def post_book():
 			teamid = g.current_user.teamid
 
 			manageid = db_session.query(Manage).filter(or_(Manage.teamid == teamid,Manage.group_id == 1)).all()
-			print len(manageid)
+			# print len(manageid)
 			if manageid:
 				glbooks = [MuGb(
 								manageid = manageid[i].id,
@@ -40,12 +40,12 @@ def post_book():
 					db_session.add_all(glbooks)
 					db_session.commit()
 				except Exception as e:
-					print e
+					print (e)
 					db_session.rollback()
 					return jsonify({"state":"数据库错误"})
 			
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 	db_session.close()

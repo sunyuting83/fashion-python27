@@ -91,43 +91,43 @@ def write_excel(self):
 		prounit.append(ords.unit)
 		proprice.append(ords.price)
 		color_total.append(ords.color_total)
- 	
- 	sheet1.write_merge(0,0,0,6,u'订单明细表',set_style('Microsoft YaHei',310,False,True))
+	
+	sheet1.write_merge(0,0,0,6,u'订单明细表',set_style('Microsoft YaHei',310,False,True))
 
- 	sheet1.write_merge(1,1,0,6,u'',set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(1,1,0,6,u'',set_style('Microsoft YaHei',220,False))
 
- 	#生成订单编号
+	#生成订单编号
 	sheet1.write_merge(2,2,0,1,u'订单编号：',set_style('Microsoft YaHei',220,True))
 	sheet1.write_merge(2,2,2,6,self.number,set_style('Microsoft YaHei',220,True))
 
- 	sheet1.write_merge(3,3,0,6,u'',set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(3,3,0,6,u'',set_style('Microsoft YaHei',220,False))
 
- 	sheet1.write_merge(4,4,0,6,u'客户信息',set_style('Microsoft YaHei',220,True))
- 	'''
- 	客户表头
- 	'''
- 	sheet1.write_merge(5,5,0,2,u'下单客户：',set_style('Microsoft YaHei',220,False))
- 	sheet1.write_merge(5,5,3,4,u'联系人',set_style('Microsoft YaHei',220,False,True))
- 	sheet1.write_merge(5,5,5,6,u'联系电话',set_style('Microsoft YaHei',220,False,True))
+	sheet1.write_merge(4,4,0,6,u'客户信息',set_style('Microsoft YaHei',220,True))
 	'''
- 	客户信息
- 	'''
- 	sheet1.write_merge(6,6,0,2,self.users.company,set_style('Microsoft YaHei',220,False))
- 	sheet1.write_merge(6,6,3,4,self.users.truename,set_style('Microsoft YaHei',220,False,True))
- 	sheet1.write_merge(6,6,5,6,self.users.phone,set_style('Microsoft YaHei',220,False,True))
+	客户表头
+	'''
+	sheet1.write_merge(5,5,0,2,u'下单客户：',set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(5,5,3,4,u'联系人',set_style('Microsoft YaHei',220,False,True))
+	sheet1.write_merge(5,5,5,6,u'联系电话',set_style('Microsoft YaHei',220,False,True))
+	'''
+	客户信息
+	'''
+	sheet1.write_merge(6,6,0,2,self.users.company,set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(6,6,3,4,self.users.truename,set_style('Microsoft YaHei',220,False,True))
+	sheet1.write_merge(6,6,5,6,self.users.phone,set_style('Microsoft YaHei',220,False,True))
 
- 	sheet1.write_merge(7,7,0,6,u'',set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(7,7,0,6,u'',set_style('Microsoft YaHei',220,False))
 
- 	sheet1.write_merge(8,8,0,6,u'收货地址：',set_style('Microsoft YaHei',220,True))
- 	sheet1.write_merge(9,9,0,2,u'联系人：'+self.od_address.contacts,set_style('Microsoft YaHei',220,False))
- 	sheet1.write_merge(9,9,3,6,u'联系电话：'+str(self.od_address.phone_number),set_style('Microsoft YaHei',220,False))
- 	sheet1.write_merge(10,10,0,6,u'收货地址：'+self.od_address.address,set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(8,8,0,6,u'收货地址：',set_style('Microsoft YaHei',220,True))
+	sheet1.write_merge(9,9,0,2,u'联系人：'+self.od_address.contacts,set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(9,9,3,6,u'联系电话：'+str(self.od_address.phone_number),set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(10,10,0,6,u'收货地址：'+self.od_address.address,set_style('Microsoft YaHei',220,False))
 
- 	sheet1.write_merge(11,11,0,6,u'',set_style('Microsoft YaHei',220,False))
+	sheet1.write_merge(11,11,0,6,u'',set_style('Microsoft YaHei',220,False))
 
- 	sheet1.write_merge(12,12,0,6,u'订单产品信息列表：',set_style('Microsoft YaHei',220,True))
+	sheet1.write_merge(12,12,0,6,u'订单产品信息列表：',set_style('Microsoft YaHei',220,True))
 
- 	for i in range(0,len(product)):
+	for i in range(0,len(product)):
 		sheet1.write(13,i,product[i],set_style('Microsoft YaHei',220,False))
 
 	for i in range(0,len(proname)):
@@ -162,7 +162,7 @@ def write_excel(self):
 	try:
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return json.dumps({'code': 0, 'message': '添加失败'})
 

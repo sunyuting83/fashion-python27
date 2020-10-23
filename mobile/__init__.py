@@ -2,10 +2,9 @@
 from flask import Blueprint
 
 # 解决中文显示问题
-import os
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+import imp
+imp.reload(sys)
 
 api = Blueprint('mobile', __name__)
 

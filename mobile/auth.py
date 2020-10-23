@@ -1,8 +1,8 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import Users, db_session, desc
-from main import message_validate #加载云片短信发送模块
-from decorator import login_check #加载验证模块
+from .main import message_validate #加载云片短信发送模块
+from .decorator import login_check #加载验证模块
 from mobile import api #加载蓝图
 import hashlib
 import time
@@ -89,8 +89,8 @@ def login():
 		try:
 			db_session.add(user)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -237,7 +237,7 @@ def register_step_4():
 	try:
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 0, 'message': '注册失败'})
 	finally:
@@ -260,8 +260,8 @@ def post_userinfo():
 		try:
 			db_session.add(userinfo)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -278,8 +278,8 @@ def change_password():
 		try:
 			db_session.add(userinfo)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -320,7 +320,7 @@ def open_touch():
 	m.update(request.get_json().get('touchid'))
 	touchid = m.hexdigest()
 
-	print touchid
+	print (touchid)
 
 	userinfo = Users.query.filter_by(id = userid).first()
 	if userinfo:
@@ -328,8 +328,8 @@ def open_touch():
 		try:
 			db_session.add(userinfo)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -348,8 +348,8 @@ def close_touch():
 		try:
 			db_session.add(userinfo)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
@@ -370,7 +370,7 @@ def forget_1():
 
 	if user:
 		validate_number = str(random.randint(100000, 1000000))
-		print validate_number
+		print (validate_number)
 		result, err_message = message_validate(send_phone_number, validate_number) #调用发送短信函数
 
 		if not result:
@@ -431,8 +431,8 @@ def forget_3():
 		try:
 			db_session.add(userinfo)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 0, 'message': '数据库错误'})
 		finally:

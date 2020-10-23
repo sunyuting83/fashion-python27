@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import Order, OrderDetailed, UserCart, db_session, desc, func
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 from config import Conf
@@ -77,12 +77,12 @@ def post_order():
 				db_session.add_all(order_item)
 				db_session.commit()
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				return jsonify({'code': 3, 'message': '数据库错误'})
 
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '数据库错误'})
 
@@ -93,7 +93,7 @@ def post_order():
 			db_session.commit()
 			db_session.close()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '数据库错误'})
 
@@ -153,8 +153,8 @@ def cancel_order():
 		try:
 			db_session.add(cancel)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '数据库错误'})
 

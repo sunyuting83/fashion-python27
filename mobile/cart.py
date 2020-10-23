@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Flask, request, jsonify, g, render_template, redirect, url_for, session, current_app
 from model import UserCart, db_session, desc, func
-from decorator import login_check
+from .decorator import login_check
 
 from mobile import api
 from config import Conf
@@ -47,8 +47,8 @@ def post_cart():
 			db_session.add(cart)
 			try:
 				db_session.commit()
-			except Exception, e:
-				print e
+			except Exception as e:
+				print (e)
 				db_session.rollback()
 				return jsonify({'code': 0, 'message': '数据库错误'})
 		else:
@@ -75,8 +75,8 @@ def post_cart():
 				)
 			try:
 				db_session.commit()
-			except Exception, e:
-				print e
+			except Exception as e:
+				print (e)
 				db_session.rollback()
 				return jsonify({'code': 0, 'message': '数据库错误'})
 	return jsonify({'code':1, 'message': '成功添加购物车到'})
@@ -104,7 +104,7 @@ def del_cart():
 	try:
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({'code': 3, 'message': '删除失败'})
 
@@ -126,7 +126,7 @@ def get_cart_cont():
 def up_cart_cont():
 	getid = request.get_json().get('cartid')
 	getunit = request.get_json().get('unit')
-	print getid,getunit
+	# print getid,getunit
 
 	thiscart = UserCart.query.filter_by(id=getid).first()
 	if thiscart:
@@ -138,7 +138,7 @@ def up_cart_cont():
 		try:
 			db_session.commit()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '更新失败'})
 
@@ -157,7 +157,7 @@ def del_many_cart():
 			db_session.commit()
 			db_session.close()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({'code': 3, 'message': '删除失败','order_type':order_type})
 		return jsonify({'code': 1, 'message': '删除成功','order_type':order_type})

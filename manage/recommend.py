@@ -5,7 +5,7 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 from wtforms.validators import Required, Email, Length
 from model import Recommend, Images, and_, or_, desc, asc, func, db_session
 from manage import api
-from public import *
+from .public import *
 import hashlib
 import datetime
 import json
@@ -100,7 +100,7 @@ def add_recommend():
 				actions = ('%s%s%s' %('增加推荐类型',':',titles))
 				savelog(actions)
 			except Exception as e:
-				print e
+				print (e)
 				db_session.rollback()
 				flash("数据库错误!")
 				return redirect('/manage/add_recommend')

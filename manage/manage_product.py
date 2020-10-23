@@ -6,14 +6,14 @@ from wtforms.validators import Required, Email, Length
 from wtforms.widgets import TextArea, ListWidget
 from model import Product, Classify, Size, Recommend, UserLike, UserCart, ProColor, Manage, Images, Wash, and_, or_, desc, asc, func, db_session
 
-from public import *
+from .public import *
 
 from manage import api
 import math
 import datetime
 import json
 
-import HTMLParser
+from html.parser import HTMLParser
 import cgi
 
 class MultiCheckboxField(SelectMultipleField): 
@@ -182,7 +182,7 @@ def del_onlypro_pic (thpro,thisdata):
 			[db_session.delete(n) for n in colorpics]
 			db_session.commit()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({"state":"数据库错误"})
 	try:
@@ -190,7 +190,7 @@ def del_onlypro_pic (thpro,thisdata):
 		[db_session.delete(n) for n in thisdata]
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({"state":"数据库错误"})
 
@@ -637,7 +637,7 @@ def edit_product():
 		# 处理封面图片
 		getcovers = request.form.get('covers')
 		oldcovers = request.form.get('oldcovers')
-		print getcovers,oldcovers
+		print (getcovers,oldcovers)
 		if getcovers == '':
 			productData.covers = oldcovers
 
@@ -753,8 +753,8 @@ def del_product():
 			try:
 				db_session.add(delproduct)
 				db_session.commit()
-			except Exception, e:
-				print e
+			except Exception as e:
+				print (e)
 				db_session.rollback()
 				return jsonify({"state":"数据库错误"})
 			likes = UserLike.query.filter_by(like_porid = getid).all()
@@ -762,8 +762,8 @@ def del_product():
 				try:
 					db_session.delete(likes)
 					db_session.commit()
-				except Exception, e:
-					print e
+				except Exception as e:
+					print (e)
 					db_session.rollback()
 					return jsonify({"state":"数据库错误"})
 			usercart = UserCart.query.filter_by(proid = getid).all()
@@ -771,8 +771,8 @@ def del_product():
 				try:
 					db_session.delete(usercart)
 					db_session.commit()
-				except Exception, e:
-					print e
+				except Exception as e:
+					print (e)
 					db_session.rollback()
 					return jsonify({"state":"数据库错误"})
 			'''
@@ -801,14 +801,14 @@ def del_product():
 						[db_session.delete(n) for n in colorpics]
 						db_session.commit()
 					except Exception as e:
-						print e
+						print (e)
 						db_session.rollback()
 						return jsonify({"state":"数据库错误"})
 				try:
 					[db_session.delete(n) for n in colors]
 					db_session.commit()
 				except Exception as e:
-					print e
+					print (e)
 					db_session.rollback()
 					return jsonify({"state":"数据库错误"})
 			'''
@@ -829,8 +829,8 @@ def del_product():
 		try:
 			db_session.add(delproduct)
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			db_session.rollback()
 			return jsonify({"state":"数据库错误"})
 		'''
@@ -861,7 +861,7 @@ def del_colors():
 		[db_session.delete(n) for n in colorpics]
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({"state":"数据库错误"})
 
@@ -869,7 +869,7 @@ def del_colors():
 		db_session.delete(delcolors)
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({"state":"数据库错误"})
 
@@ -913,8 +913,8 @@ def pic_sorts():
 	try:
 		db_session.commit()
 		db_session.close()
-	except Exception, e:
-		print e
+	except Exception as e:
+		print (e)
 		return jsonify({'state':'数据库错误'})
 	return jsonify({'state':'ok'})
 
@@ -930,8 +930,8 @@ def up_pro_state():
 		db_session.add(upst)
 		try:
 			db_session.commit()
-		except Exception, e:
-			print e
+		except Exception as e:
+			print (e)
 			return jsonify({"state":"数据库错误"})
 	db_session.close()
 	

@@ -5,9 +5,9 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 
 from model import Order, OrderDetailed, OrderState, and_, or_, desc, asc, func, db_session, extract
 
-from public import *
+from .public import *
 from config import Conf
-from excel import *
+from .excel import *
 
 from manage import api
 
@@ -28,7 +28,7 @@ def upst_to_st(orderid,state,text):
 		db_session.add(orderstate)
 		db_session.commit()
 	except Exception as e:
-		print e
+		print (e)
 		db_session.rollback()
 		return jsonify({"state":"数据库错误"})
 
@@ -348,7 +348,7 @@ def edit_order():
 			db_session.add(upstate)
 			db_session.commit()
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({"state":"数据库错误"})
 	return jsonify({"state":"ok"})

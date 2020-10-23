@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectField, HiddenField
 from wtforms.validators import Required, Email, Length
 from manage import api
-from public import *
+from .public import *
 from config import Conf
 
 import datetime

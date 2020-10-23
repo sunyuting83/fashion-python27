@@ -5,7 +5,7 @@ from wtforms import TextField, BooleanField, PasswordField, SubmitField, SelectF
 from wtforms.validators import Required, Email, Length
 from model import ContactUs, Manage, and_, or_, desc, asc, func, db_session
 from manage import api
-from public import *
+from .public import *
 
 # 修改管理员表单
 class EditusForm(FlaskForm):
@@ -182,7 +182,7 @@ def up_contact():
 			actions = ('%s%s' %(actioni,upthis.username))
 			savelog(actions)
 		except Exception as e:
-			print e
+			print (e)
 			db_session.rollback()
 			return jsonify({"state":"数据库错误"})
 		db_session.close()

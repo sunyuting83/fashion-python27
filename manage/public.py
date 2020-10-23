@@ -23,7 +23,7 @@ import time
 import json
 import re
 from PIL import Image
-import StringIO
+from io import StringIO
 
 # 解决flask-login与Blueprint冲突
 lm = LoginManager()
@@ -75,14 +75,14 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit():
 		m = hashlib.md5()
-		m.update(request.form.get('user_password'))
+		m.update(str(request.form.get('user_password')).encode('utf-8'))
 		upassword = m.hexdigest()
 		user = Manage.login_check(request.form.get('user_name'),upassword)
 		# print form.remember_me.data
 		if user:
 			# login_user(user, form.remember_me.data)
 			login_user(user, False, False, False)
-
+			print(current_user.manage_group.id)
 			# 记录登录次数和最后登录时间IP
 			user.last_login_time = datetime.datetime.now()
 			user.login_size += 1
@@ -328,8 +328,8 @@ def resize_img(img_path,imgurl):
 			out.save(new_file_name,quality=80)
 			newname.append('%s%s%s' %(fullUrl,hz,ext))
 		return newname
-	except Exception,e:
-		print e
+	except Exception as e:
+		print (e)
 
 # 短信发送函数
 def message_validate(phone_number,message):
