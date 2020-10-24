@@ -13,7 +13,7 @@ import cgi
 import re
 from config import Conf
 
-Domain = 'http://api.1showroomonline.com'
+Domain = Conf.SERVER_URL
 # print(Conf.SQLITE_INFO)
 engine = create_engine(Conf.SQLITE_INFO, connect_args={'check_same_thread':False}, poolclass=SingletonThreadPool)
 
