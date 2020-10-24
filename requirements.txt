@@ -3,7 +3,8 @@ sqlalchemy
 redis
 flask_wtf
 flask_login
-image
+Pillow
+email_validator
 yunpian-python-sdk
 requests
 Flask-Mail

@@ -20,7 +20,7 @@ class LocalhostConfig(Config):
 	REDIS_HOST = '127.0.0.1'
 	REDIS_PORT = 6379
 	REDIS_DB = 4
-	REDIS_PASSWORD = 'BCnb1jzIzHW9'
+	REDIS_PASSWORD = '3SuLc0VvzLJm'
 
 	SQLITE_INFO = 'sqlite:///'+ os.path.join(basedir,'fashion.sqlite')
 	# SQLITE_INFO = "mysql://root:penny5921929@127.0.0.1:3306/fashion?charset=utf8"
