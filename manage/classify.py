@@ -92,7 +92,7 @@ def add_classify():
 		ctype = request.form.get('ctype')
 		display = request.form.get('display')
 
-		if icon == '' or icon is None:
+		if icon == '' or icon == None:
 			icon = 0
 
 		classify = Classify(topid=topid, classname=classname, icon=icon, ctype=ctype, display=display, sort=sort, uptime=datetime.datetime.now())
@@ -224,7 +224,7 @@ def update_sort():
 
 	getid = request.form.getlist('classid')
 	sort = request.form.getlist('sort')
-	if len(getid) is 1:
+	if len(getid) == 1:
 		getid = request.form.get('classid')
 	else:
 		for (getid,sort) in zip(getid,sort):

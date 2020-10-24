@@ -31,7 +31,7 @@ def post_cart():
 					size       = orderjson['size'],
 					color      = orderjson['color']
 				).first()
-		if hascart is None:
+		if hascart == None:
 			cart = UserCart(
 					userid = int(userid),
 					order_type = int(orderjson['type']),

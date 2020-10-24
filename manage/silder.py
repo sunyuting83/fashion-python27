@@ -167,7 +167,7 @@ def del_silder():
 @login_required
 def chose_pro():
 	proname = request.args.get('proname')
-	if proname is None or proname is '':
+	if proname == None or proname == '':
 		proname = ''
 
 	lim = int(10) #get到每页显示数量
@@ -190,7 +190,7 @@ def chose_pro():
 		page_size.append(i + 1)
 
 	previous = page - 1
-	if previous is 0:
+	if previous == 0:
 		previous = 0
 	nextp = page + 1
 	if nextp == page_cont:

@@ -57,7 +57,7 @@ def manage_customers(page = 1):
 	else:
 		newcont = db_session.query(func.count(Users.id)).filter(Users.verify == verify, Users.lock == status, Users.teamid == current_user.teamid).scalar() #计算数据总数
 
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 	page_cont = int(math.ceil(round(float(newcont) / lim,2))) #总数除以显示数量得到分页总数
 
@@ -75,14 +75,14 @@ def manage_customers(page = 1):
 	# print '%s%s%s%s%s%s%s%s%s%s%s%s%s%s' %('总信息数：',newcont,'  每页显示数：',lim,'  当前页：',page,'  总页数：',page_cont,'  当前显示首数：',page_nb,'  当前显示尾数：',page_show,'  分页：',page_size)
 
 	previous = page - 1
-	if previous is 0:
+	if previous == 0:
 		previous = 0
 	nextp = page + 1
 	if nextp == page_cont:
 		nextp = page_cont
 
 	# 如果没有搜索条件，直接获取列表
-	if search is None:
+	if search == None:
 		search = ''
 		if current_user.group.power == 0:  #超级管理员
 			userlist = Users.query.\
@@ -242,7 +242,7 @@ def examineall_customers():
 	getid = request.form.getlist('id')
 	examine = request.args.get('examine',0)
 
-	if len(getid) is 1:
+	if len(getid) == 1:
 		getid = request.form.get('id')
 		try:
 			upsort = db_session.query(Users).\

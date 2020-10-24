@@ -29,7 +29,7 @@ def get_Children(id,towclass):
 @api.route('/getClassify', methods=['GET'])
 def getClassify():
 	topid = request.args.get('topid',0)
-	if int(topid) is 0:
+	if int(topid) == 0:
 		classify = Classify.query.\
 					filter_by(ctype = 0).\
 					filter_by(display = 0).\

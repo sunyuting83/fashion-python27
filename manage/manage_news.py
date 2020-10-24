@@ -60,7 +60,7 @@ def manage_news():
 	if current_user.group.power == 2: #组员
 		newcont = db_session.query(func.count(News.id)).filter(News.pid == pid, News.display == display, News.teamid == current_user.teamid, News.userid == current_user.id).scalar() #计算数据总数
 
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 	page_cont = int(math.ceil(round(float(newcont) / lim,2))) #总数除以显示数量得到分页总数
 
@@ -78,14 +78,14 @@ def manage_news():
 	# print '%s%s%s%s%s%s%s%s%s%s%s%s%s%s' %('总信息数：',newcont,'  每页显示数：',lim,'  当前页：',page,'  总页数：',page_cont,'  当前显示首数：',page_nb,'  当前显示尾数：',page_show,'  分页：',page_size)
 
 	previous = page - 1
-	if previous is 0:
+	if previous == 0:
 		previous = 0
 	nextp = page + 1
 	if nextp == page_cont:
 		nextp = page_cont
 
 	# 如果没有搜索条件，直接获取列表
-	if title is None:
+	if title == None:
 		title = ''
 		if current_user.group.power == 0:  #超级管理员
 			newslist = db_session.query(News).\
@@ -281,7 +281,7 @@ def edit_news():
 def del_news():
 	if request.method == "POST":
 		getid = request.form.getlist('id')
-		if len(getid) is 1:
+		if len(getid) == 1:
 			getid = request.form.get('id')
 			delg = db_session.query(News).filter(News.id == getid).first()
 			try:

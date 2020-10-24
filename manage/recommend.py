@@ -87,7 +87,7 @@ def add_recommend():
 		sort = request.form.get('sort')
 		titles = request.form.get('titles')
 
-		if icon == '' or icon is None:
+		if icon == '' or icon == None:
 			icon = 0
 
 		recommend = Recommend(topid=topid, titles=titles, icon=icon, sort=sort)
@@ -214,7 +214,7 @@ def updatere_sort():
 
 	getid = request.form.getlist('id')
 	sort = request.form.getlist('sort')
-	if len(getid) is 1:
+	if len(getid) == 1:
 		getid = request.form.get('id')
 	else:
 		for (getid,sort) in zip(getid,sort):

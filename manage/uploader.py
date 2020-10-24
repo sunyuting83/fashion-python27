@@ -216,7 +216,7 @@ class Uploader:
 		rand_re = r'\{rand\:(\d*)\}'
 		_pattern = re.compile(rand_re, flags=re.I)
 		_match = _pattern.search(_format)
-		if _match is not None:
+		if _match == not None:
 			n = int(_match.groups()[0])
 			_format = _pattern.sub(str(random.randrange(10**(n-1), 10**n)), _format)
 

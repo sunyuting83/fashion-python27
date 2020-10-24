@@ -44,10 +44,10 @@ def make_message(userphone,usernames,ordernumber,text):
 @login_required
 def manage_order(order_type,state=0):
 
-	if order_type is None:
+	if order_type == None:
 		order_type = 0
 		tsActive = 'manage_order'
-	if order_type is 0:
+	if order_type == 0:
 		tsActive = 'manage_order'
 	else:
 		tsActive = 'manage_jdorder'
@@ -69,7 +69,7 @@ def manage_order(order_type,state=0):
 		newcont = db_session.query(func.count(Order.id)).\
 				filter(Order.order_type == order_type, Order.state == state, Order.teamid == current_user.teamid).scalar() #计算数据总数
 
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 	page_cont = int(math.ceil(round(float(newcont) / lim,2))) #总数除以显示数量得到分页总数
 
@@ -87,14 +87,14 @@ def manage_order(order_type,state=0):
 	# print '%s%s%s%s%s%s%s%s%s%s%s%s%s%s' %('总信息数：',newcont,'  每页显示数：',lim,'  当前页：',page,'  总页数：',page_cont,'  当前显示首数：',page_nb,'  当前显示尾数：',page_show,'  分页：',page_size)
 
 	previous = page - 1
-	if previous is 0:
+	if previous == 0:
 		previous = 0
 	nextp = page + 1
 	if nextp == page_cont:
 		nextp = page_cont
 
 	# 如果没有搜索条件，直接获取列表
-	if ordernb is None:
+	if ordernb == None:
 		ordernb = ''
 		if current_user.group.power == 0:
 			orderlist = db_session.query(Order).\
@@ -157,7 +157,7 @@ def manage_order(order_type,state=0):
 @api.route('/view_order', methods=['GET', 'POST'])
 @login_required
 def view_order():
-	if request.args.get('order_type') is None:
+	if request.args.get('order_type') == None:
 		order_type = 0
 	else:
 		order_type = int(request.args.get('order_type'))
@@ -218,7 +218,7 @@ def edit_order():
 				
 				# 发送邮件函数暂时去掉
 				atitle = '订单详细信息.xls'
-				if int(excel['code']) is 1:
+				if int(excel['code']) == 1:
 					# 调用邮件函数
 					title = '【iShowRoom】您的订单详细信息'
 					recipients = [usermail,Conf.MAIL_USERNAME]
@@ -360,7 +360,7 @@ def edit_order():
 def order_statistics():
 	thispage = request.args.get('thispage')
 	getdate = ''
-	if thispage is 'day' or thispage is None:
+	if thispage == 'day' or thispage == None:
 		thispage = 'day'
 	if thispage == 'diy':
 		getdate = request.form.get('diys')

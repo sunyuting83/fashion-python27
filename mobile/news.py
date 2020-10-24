@@ -19,7 +19,7 @@ def news():
 
 	newcont = db_session.query(func.count(News.id)).\
 				filter(News.pid == getpid, News.display ==0).scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:

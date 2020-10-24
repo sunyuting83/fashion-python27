@@ -13,14 +13,14 @@ import json
 def getProductList():
 	topid = int(request.args.get('topid'))
 	page = int(request.args.get('pageNo',1)) #get到页数
-	if topid is None:
+	if topid == None:
 		abort(404)
 
 	lim = int(6) #get到每页显示数量
 
 	newcont = db_session.query(func.count(Product.proid)).\
 				filter(Product.pid == topid, Product.display == 0).scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:
@@ -43,7 +43,7 @@ def getProductList():
 def getSearchList():
 	proname = request.args.get('proname')
 	page = int(request.args.get('pageNo',1)) #get到页数
-	if proname is None or proname is '':
+	if proname == None or proname == '':
 		proname = ''
 
 	# print proname
@@ -52,7 +52,7 @@ def getSearchList():
 
 	newcont = db_session.query(func.count(Product.proid)).\
 				filter(Product.proname.like("%"+proname+"%"), Product.display == 0).scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:
@@ -74,14 +74,14 @@ def getSearchList():
 def getstProduct():
 	topid = int(request.args.get('topid'))
 	page = int(request.args.get('pageNo',1)) #get到页数
-	if topid is None:
+	if topid == None:
 		abort(404)
 
 	lim = int(6) #get到每页显示数量
 
 	newcont = db_session.query(func.count(Product.proid)).\
 				filter(Product.new_p == topid, Product.display == 0).scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:

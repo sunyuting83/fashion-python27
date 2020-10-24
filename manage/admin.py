@@ -118,7 +118,7 @@ def add_admin():
 	form = AddadminForm()
 	if form.validate_on_submit():
 		teamsid = ''
-		if current_user.group.power is 0:
+		if current_user.group.power == 0:
 			teamsid = request.form.get('teams')
 		else:
 			teamsid = request.form.get('teamid')

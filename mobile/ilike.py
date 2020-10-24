@@ -79,7 +79,7 @@ def ilikelist():
 
 	newcont = db_session.query(func.count(UserLike.user_id)).\
 				filter(UserLike.user_id == userid).scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:

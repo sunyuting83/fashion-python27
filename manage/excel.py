@@ -47,7 +47,7 @@ def set_style(name,height,bold=False,center=False):
 	font.color_index = 4
 	font.height = height
 
-	if center is True:
+	if center == True:
 		style.alignment = alignment
  
 	# borders= xlwt.Borders()

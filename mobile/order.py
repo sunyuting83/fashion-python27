@@ -125,7 +125,7 @@ def get_order():
 				filter(Order.order_type == ordertype).\
 				filter(Order.state.in_((state))).\
 				scalar() #计算数据总数
-	if newcont is None:
+	if newcont == None:
 		newcont = 0
 
 	if page == 1:

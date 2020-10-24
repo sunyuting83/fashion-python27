@@ -221,7 +221,7 @@ def manage_product():
 	page = int(request.args.get('page',1)) #get到页数
 
 	# 权限判断
-	if pid is 0 or pid is None:
+	if pid == 0 or pid == None:
 		if current_user.group.power == 0:  #超级管理员
 			newcont = db_session.query(func.count(Product.proid)).filter( Product.display == display).scalar() #计算数据总数
 		if current_user.group.power == 1:  #组长
@@ -253,7 +253,7 @@ def manage_product():
 	# print '%s%s%s%s%s%s%s%s%s%s%s%s%s%s' %('总信息数：',newcont,'  每页显示数：',lim,'  当前页：',page,'  总页数：',page_cont,'  当前显示首数：',page_nb,'  当前显示尾数：',page_show,'  分页：',page_size)
 
 	previous = page - 1
-	if previous is 0:
+	if previous == 0:
 		previous = 0
 	nextp = page + 1
 	if nextp == page_cont:
@@ -261,8 +261,8 @@ def manage_product():
 
 
 	# 如果没有搜索条件，直接获取列表
-	if pid is 0 or pid is None:
-		if proname is None:
+	if pid == 0 or pid == None:
+		if proname == None:
 			proname = ''
 			if current_user.group.power == 0:
 				productlist = Product.query.\
@@ -322,7 +322,7 @@ def manage_product():
 						filter(Product.proname.like("%"+proname+"%"), Product.display == display, Product.teamid == current_user.teamid, Product.creatorid == current_user.id).\
 						group_by(Product.proid).limit(lim)[0:page_show]
 	else:
-		if proname is None:
+		if proname == None:
 			proname = ''
 			if current_user.group.power == 0:
 				productlist = Product.query.\
@@ -463,7 +463,7 @@ def add_product():
 		html_con = request.form.get('text_centont')
 		text_centont = html_parser.unescape(html_con)
 
-		if covers == '' or covers is None:
+		if covers == '' or covers == None:
 			covers = 0
 
 		product = Product(
@@ -744,7 +744,7 @@ def edit_product():
 def del_product():
 	if request.method == "POST":
 		getid = request.form.getlist('id')
-		if len(getid) is 1:
+		if len(getid) == 1:
 			# 如果只选择了一项
 			getid = request.form.get('id')
 

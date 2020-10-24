@@ -14,7 +14,7 @@ def getProduct():
 	# phone_number = request.headers.get('token')
 	# print phone_number
 	proid = int(request.args.get('proid'))
-	if proid is None:
+	if proid == None:
 		abort(404)
 	product = Product.query.filter_by(proid = proid)
 

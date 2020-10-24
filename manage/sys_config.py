@@ -64,7 +64,7 @@ def sys_config():
 		mail_password = request.form.get('mail_password')
 
 		
-		if mail_use_tls is None:
+		if mail_use_tls == None:
 			mail_use_tls = False
 		else:
 			mail_use_tls = True
