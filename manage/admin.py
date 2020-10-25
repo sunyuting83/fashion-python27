@@ -216,6 +216,7 @@ def edit_admin():
 		phone = request.form.get('phone')
 		mail = request.form.get('mail')
 		wechat = request.form.get('wechat')
+		teams = request.form.get('teams')
 
 		# 判断是否修改密码
 		if not password.strip():
@@ -228,6 +229,7 @@ def edit_admin():
 					Manage.name : name,
 					Manage.phone : phone,
 					Manage.mail : mail,
+					Manage.teamid : teams,
 					Manage.wechat : wechat
 				})
 			try:
@@ -240,7 +242,7 @@ def edit_admin():
 		# 如果修改密码
 		else:
 			m = hashlib.md5()
-			m.update(request.form.get('password'))
+			m.update(request.form.get('password').encode('utf-8'))
 			password = m.hexdigest()
 			db_session.query(Manage).filter(Manage.id == id).update(
 				{
@@ -252,6 +254,7 @@ def edit_admin():
 					Manage.name : name,
 					Manage.phone : phone,
 					Manage.mail : mail,
+					Manage.teamid : teams,
 					Manage.wechat : wechat
 				})
 			db_session.commit()
