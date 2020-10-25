@@ -95,9 +95,9 @@ def login():
 			return jsonify({'code': 0, 'message': '数据库错误'})
 
 	m = hashlib.md5()
-	m.update(phone_number)
-	m.update(password)
-	m.update(str(int(time.time())))
+	m.update(str(phone_number).encode('utf-8'))
+	m.update(str(password).encode('utf-8'))
+	m.update(str(int(time.time())).encode('utf-8'))
 	token = m.hexdigest()
 
 	pipeline = current_app.redis.pipeline()
@@ -297,9 +297,9 @@ def touch_login():
 		return jsonify({'code': 0, 'message': '账户被锁定'})
 
 	m = hashlib.md5()
-	m.update(str(int(user.phone)))
-	m.update(user.password)
-	m.update(str(int(time.time())))
+	m.update(str(int(user.phone)).encode('utf-8'))
+	m.update(str(user.password).encode('utf-8'))
+	m.update(str(int(time.time())).encode('utf-8'))
 	token = m.hexdigest()
 
 	pipeline = current_app.redis.pipeline()
@@ -317,7 +317,7 @@ def open_touch():
 	userid = g.current_user.id
 
 	m = hashlib.md5()
-	m.update(request.get_json().get('touchid'))
+	m.update(str(request.get_json().get('touchid')).encode('utf-8'))
 	touchid = m.hexdigest()
 
 	print (touchid)
