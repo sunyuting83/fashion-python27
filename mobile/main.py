@@ -16,7 +16,9 @@ import json
 @api.before_request
 def before_request():
 	token = request.headers.get('token')
-	phone_number = current_app.redis.get('token:%s' % token)
+	phone_number = None
+	if token:
+		phone_number = current_app.redis.get('token:%s' % token).decode('utf-8')
 	if phone_number:
 		g.current_user = Users.query.filter_by(phone=phone_number).first()
 		g.token = token

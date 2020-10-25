@@ -24,7 +24,7 @@ class LocalhostConfig(Config):
 
 	SQLITE_INFO = 'sqlite:///'+ os.path.join(basedir,'fashion.sqlite')
 	# SQLITE_INFO = "mysql://root:penny5921929@127.0.0.1:3306/fashion?charset=utf8"
-	SERVER_URL = "http://localhost:5000/"
+	SERVER_URL = "http://192.168.1.105:5000/"
 
 	SQLALCHEMY_DATABASE_URI = SQLITE_INFO
 	SQLALCHEMY_TRACK_MODIFICATIONS = True

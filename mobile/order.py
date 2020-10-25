@@ -36,6 +36,7 @@ def post_order():
 	cartid = []
 	all_total = 0
 	for i in range(len(orderitems)):
+		print(orderitems[i])
 		# 计算订单总金额
 		all_total += orderitems[i]['color_total']
 		# 得到购物车id

@@ -191,10 +191,6 @@ class Manage(Base):
 	def get_cn_first_letter(self,codec="UTF8"):
 		if not self.name:
 			return 'A'
-		if codec!="GBK":
-			if codec!="unicode":
-				self.name=self.name.decode(codec)
-			self.name=self.name.encode("GBK")
 
 		if self.name<"\xb0\xa1" or self.name>"\xd7\xf9":
 			return "X"
@@ -798,10 +794,6 @@ class Address(Base):
 	def get_cn_first_letter(self,codec="UTF8"):
 		if not self.contacts:
 			return 'A'
-		if codec!="GBK":
-			if codec!="unicode":
-				self.contacts=self.contacts.decode(codec)
-			self.contacts=self.contacts.encode("GBK")
 
 		if self.contacts<"\xb0\xa1" or self.contacts>"\xd7\xf9":
 			return "X"

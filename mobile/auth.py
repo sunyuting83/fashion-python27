@@ -11,10 +11,10 @@ import datetime
 
 # 获取汉字首字母
 def get_cn_first_letter(str,codec="UTF8"):
-	if codec!="GBK":
-		if codec!="unicode":
-			str=str.decode(codec)
-		str=str.encode("GBK")
+	# if codec!="GBK":
+	# 	if codec!="unicode":
+	# 		str=str.decode(codec)
+	# 	str=str.encode("GBK")
 
 	if str<"\xb0\xa1" or str>"\xd7\xf9":
 		return "X"
@@ -105,7 +105,6 @@ def login():
 	pipeline.set('token:%s' % token, user.phone)
 	pipeline.expire('token:%s' % token, 3600*24*30)
 	pipeline.execute()
-
 	return jsonify({'code': 1, 'message': '成功登录', 'userid': user.id, 'token': token})
 
 
@@ -113,14 +112,13 @@ def login():
 @login_check
 def user():
 	user = g.current_user
-
 	touched = user.touchid
 	if touched == None:
 		touchis = 0
 	else:
 		touchis = 1
 
-	company = current_app.redis.hget('user:%s' % user.phone, 'company')
+	company = current_app.redis.hget('user:%s' % user.phone, 'company').decode('utf-8')
 	pingying = user.truename[-1]
 	pingying = get_cn_first_letter(pingying)
 	return jsonify({'code': 1, 'company': company, 'phone': user.phone, 'mail': user.mail, 'contact': user.truename, 'userid': user.id, 'pingying': pingying, 'touchis': touchis})
@@ -172,7 +170,7 @@ def register_step_2():
 	"""
 	phone_number = request.get_json().get('phone_number')
 	validate_number = request.get_json().get('validate_number')
-	validate_number_in_redis = current_app.redis.get('validate:%s' % phone_number)
+	validate_number_in_redis = current_app.redis.get('validate:%s' % phone_number).decode('utf-8')
 
 	if validate_number != validate_number_in_redis:
 		return jsonify({'code': 0, 'message': '验证没有通过'})
@@ -201,7 +199,7 @@ def register_step_3():
 	if password != password_confirm:
 		return jsonify({'code': 0, 'message': '密码和密码确认不一致'})
 
-	is_validate = current_app.redis.get('is_validate:%s' % phone_number)
+	is_validate = current_app.redis.get('is_validate:%s' % phone_number).decode('utf-8')
 
 	if is_validate != '1':
 		return jsonify({'code': 0, 'message': '验证码没有通过'})
@@ -224,12 +222,12 @@ def register_step_4():
 	company = request.get_json().get('company')
 	truename = request.get_json().get('truename')
 
-	is_validate = current_app.redis.get('is_validate:%s' % phone_number)
+	is_validate = current_app.redis.get('is_validate:%s' % phone_number).decode('utf-8')
 
 	if is_validate != '1':
 		return jsonify({'code': 0, 'message': '验证码没有通过'})
 
-	password = current_app.redis.hget('register:%s' % phone_number, 'password')
+	password = current_app.redis.hget('register:%s' % phone_number, 'password').decode('utf-8')
 
 	new_user = Users(phone=phone_number, password=password, mail=mail, company=company, truename=truename, lock=0, verify=1, teamid=0, addtime=datetime.datetime.now())
 	db_session.add(new_user)
@@ -392,7 +390,7 @@ def forget_2():
 	"""
 	phone_number = request.get_json().get('phone_number')
 	validate_number = request.get_json().get('validate_number')
-	validate_number_in_redis = current_app.redis.get('validate:%s' % phone_number)
+	validate_number_in_redis = current_app.redis.get('validate:%s' % phone_number).decode('utf-8')
 
 	if validate_number != validate_number_in_redis:
 		return jsonify({'code': 0, 'message': '验证没有通过'})
@@ -420,7 +418,7 @@ def forget_3():
 	if password != password_confirm:
 		return jsonify({'code': 0, 'message': '密码和密码确认不一致'})
 
-	is_validate = current_app.redis.get('is_validate:%s' % phone_number)
+	is_validate = current_app.redis.get('is_validate:%s' % phone_number).decode('utf-8')
 
 	if is_validate != '1':
 		return jsonify({'code': 0, 'message': '验证码没有通过'})
