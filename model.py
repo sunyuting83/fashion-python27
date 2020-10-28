@@ -8,7 +8,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.pool import SingletonThreadPool
 import datetime
 import json
-from html.parser import HTMLParser
+import html
 import cgi
 import re
 from config import Conf
@@ -635,9 +635,7 @@ class News(Base):
 	def change_html (self):
 		if not self.content:
 			return ''
-		html_parser = HTMLParser.HTMLParser()
-		html_con = self.content
-		content = html_parser.unescape(html_con)
+		content = html.unescape(self.content)
 		return content
 
 	# 获取帮助详细信息
@@ -652,9 +650,7 @@ class News(Base):
 	def get_imgs (self):
 		if not self.content:
 			return ''
-		html_parser = HTMLParser.HTMLParser()
-		html_con = self.content
-		content = html_parser.unescape(html_con)
+		content = html.unescape(self.content)
 
 		picurl = re.findall('src="(.*?)"',content)
 		piclist = []
@@ -692,9 +688,7 @@ class Company(Base):
 	def change_html (self):
 		if not self.content:
 			return ''
-		html_parser = HTMLParser.HTMLParser()
-		html_con = self.content
-		content = html_parser.unescape(html_con)
+		content = html.unescape(self.content)
 		return content
 
 	# 前端调用函数

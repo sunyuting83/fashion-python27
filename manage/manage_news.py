@@ -13,6 +13,7 @@ import math
 import datetime
 from html.parser import HTMLParser
 import cgi
+import html
 
 
 # 修改资讯表单
@@ -177,7 +178,7 @@ def add_news():
 	if form.validate_on_submit():
 		userid = int(request.form.get('userid'))
 		title = request.form.get('title')
-		getcontent = cgi.escape(request.form.get('editor'))
+		getcontent = html.escape(request.form.get('editor'))
 		display = int(request.form.get('display'))
 
 		news = News(pid=pid, title=title, content=getcontent, display=display, userid=userid, teamid =current_user.teamid, addtime=datetime.datetime.now())
@@ -245,7 +246,7 @@ def edit_news():
 	if form.validate_on_submit():
 		id = request.form.get('id')
 		title = request.form.get('title')
-		content = cgi.escape(request.form.get('editor'))
+		content = html.escape(request.form.get('editor'))
 		display = request.form.get('display')
 		# print content,title
 

@@ -35,12 +35,14 @@ def post_order():
 	# 计算订单总金额 和 图片真实地址 和 购物车id
 	cartid = []
 	all_total = 0
-	for i in range(len(orderitems)):
-		print(orderitems[i])
-		# 计算订单总金额
-		all_total += orderitems[i]['color_total']
-		# 得到购物车id
-		cartid.append(orderitems[i]['cartid'])
+	if 'cartid' not in orderitems[0]:
+		all_total = orderitems[0]['color_total']
+	else:
+		for i in range(len(orderitems)):
+			# 计算订单总金额
+			all_total += orderitems[i]['color_total']
+			# 得到购物车id
+			cartid.append(orderitems[i]['cartid'])
 	
 
 	if len(orderitems) > 0:
@@ -69,7 +71,7 @@ def post_order():
 							size = orderitems[i]['size'],
 							color = orderitems[i]['color'],
 							unit = int(orderitems[i]['unit']),
-							price = int(orderitems[i]['price']),
+							price = int(float(orderitems[i]['price'])),
 							color_total = int(orderitems[i]['color_total']),
 							order_id = int(order_id)
 						)for i in range(len(orderitems))]

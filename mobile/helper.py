@@ -11,7 +11,7 @@ import json
 # 新闻列表
 @api.route('/helper')
 def helper():
-	getpid = int(request.args.get('pid',1))
+	getpid = int(request.args.get('getid',1))
 	helplist = News.query.filter_by(pid = getpid, display = 0).all()
 
 	return jsonify({'help': [Help.to_list() for Help in helplist]})
